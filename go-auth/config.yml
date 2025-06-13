@@ -5,3 +5,11 @@ engine:
 
 mysql:
   dsn: root:root123456@tcp(127.0.0.1:3306)/go-auth?charset=utf8mb4&parseTime=True&loc=Local
+
+redis:
+  addrs:
+    - 127.0.0.1:6379
+    - 127.0.0.1:6380
+  username: ""
+  password: ""
+  pool_size: 10
