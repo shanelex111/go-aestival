@@ -90,3 +90,34 @@ IF EXISTS account;
         KEY `idx_target_type` (`type`, `target`) USING BTREE,
         KEY `idx_target_country` (`target`, `country_code`) USING BTREE
       ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '验证码表';
+
+DROP TABLE IF EXISTS `account_platform`;
+CREATE TABLE `account_platform` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `account_id` int unsigned NOT NULL COMMENT '账户ID',
+  `type` tinyint NOT NULL COMMENT '平台类型，0：未知，1：wechat，2：qq，3：weibo\r\n11：google，12：twitter，13：facebook',
+  `platform_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '平台id',
+  `platform_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '平台access_token',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '昵称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '头像',
+  `created_at` bigint NOT NULL COMMENT '创建时间，毫秒时间戳',
+  `updated_at` bigint NOT NULL COMMENT '更新时间，毫秒时间戳',
+  `deleted_at` bigint NOT NULL COMMENT '注销时间，毫秒时间戳',
+  PRIMARY KEY (`id`),
+  KEY `idx_account_id` (`account_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='第三方账户表';
+
+
+DROP TABLE IF EXISTS `aestival_member`;
+CREATE TABLE `aestival_member` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `account_id` int unsigned NOT NULL COMMENT '账户ID',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '昵称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '头像相对地址',
+  `role` tinyint(1) NOT NULL DEFAULT '0' COMMENT '角色：0：普通用户，1：vip',
+  `created_at` bigint NOT NULL COMMENT '创建时间，毫秒时间戳',
+  `updated_at` bigint NOT NULL COMMENT '更新时间，毫秒时间戳',
+  `deleted_at` bigint NOT NULL COMMENT '注销时间，毫秒时间戳',
+  PRIMARY KEY (`id`),
+  KEY `idx_account_id` (`account_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
