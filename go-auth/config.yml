@@ -1,5 +1,7 @@
-server:
+engine:
   port: 8600
+  # 环境 dev | test | pre-prod | release
+  mode: dev
 
 mysql:
   dsn: user:password@tcp(mysql:3306)/go_auth?charset=utf8mb4&parseTime=True&loc=Local

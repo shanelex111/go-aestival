@@ -5,5 +5,10 @@ metadata:
   namespace: go-aestival-dev
 data:
   config.yml: |-
-    server:
+    engine:
       port: 80
+      # 环境 dev | test | pre-prod | release
+      mode: dev
+      
+    mysql:
+      dsn: user:password@tcp(mysql:3306)/go_auth?charset=utf8mb4&parseTime=True&loc=Local
