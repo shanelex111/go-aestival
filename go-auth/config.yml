@@ -1,2 +1,5 @@
 server:
   port: 8600
+
+mysql:
+  dsn: root:root@tcp(mysql:3306)/go_auth?charset=utf8mb4&parseTime=True&loc=Local
