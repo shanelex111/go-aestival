@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-auth
+  namespace: go-aestival-dev
+spec:
+  selector:
+    matchLabels:
+      app: go-auth
+  template:
+    metadata:
+      labels:
+        app: go-auth
+    spec:
+      containers:
+        - name: go-auth
+          image: harbor.aestival.com/go-auth:v0.0.1
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /config.yml
+              name: go-auth
+              subPath: config.yml
+      restartPolicy: Always
+      nodeSelector:
+        node-role.kubernetes.io/worker: "true"
+      volume:
+        - name: go-auth
+          configMap:
+            name: go-auth
+            items:
+              - key: config.yml
+                path: config.yml

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-auth
+  namespace: go-aestival-dev
+data:
+  config.yml: |-
+    server:
+      port: 80
