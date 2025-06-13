@@ -5,12 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shanelex111/go-common/pkg/engine"
+	"github.com/shanelex111/go-common/pkg/request"
 )
 
 func Run() {
 	gin.SetMode(getGinMode())
 	r := gin.New()
 	r.Use(gin.Recovery())
+	r.Use(request.SetLogger())
 
 	authGroup := r.Group("/auth/v1")
 	{
