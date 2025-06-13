@@ -4,6 +4,8 @@ go 1.24.2
 
 require github.com/spf13/viper v1.20.1
 
+require github.com/shanelex111/go-common v0.0.0-20250613092307-de14d2510e88 // indirect
+
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/bytedance/sonic v1.13.3 // indirect
@@ -30,7 +32,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
-	github.com/shanelex111/go-common v0.0.0-20250606093956-726770b998c3 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect

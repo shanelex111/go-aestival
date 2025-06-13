@@ -4,4 +4,4 @@ engine:
   mode: dev
 
 mysql:
-  dsn: user:password@tcp(mysql:3306)/go_auth?charset=utf8mb4&parseTime=True&loc=Local
+  dsn: root:root123456@tcp(127.0.0.1:3306)/go-auth?charset=utf8mb4&parseTime=True&loc=Local

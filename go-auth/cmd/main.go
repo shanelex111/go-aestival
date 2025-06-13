@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/shanelex111/go-common/pkg/config"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
+	"github.com/shanelex111/go-common/pkg/engine"
 	"github.com/shanelex111/go-common/pkg/server"
 )
 
@@ -13,5 +14,5 @@ func main() {
 	}
 
 	// server init
-	server.Init(v, mysql.Init)
+	server.Init(v, engine.Init, mysql.Init)
 }

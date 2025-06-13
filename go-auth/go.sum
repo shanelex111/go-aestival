@@ -60,6 +60,8 @@ github.com/sagikazarmark/locafero v0.7.0 h1:5MqpDsTGNDhY8sGp0Aowyf0qKsPrhewaLSsF
 github.com/sagikazarmark/locafero v0.7.0/go.mod h1:2za3Cg5rMaTMoG/2Ulr9AwtFaIppKXTRYnozin4aB5k=
 github.com/shanelex111/go-common v0.0.0-20250606093956-726770b998c3 h1:SBWYJsVcij8MQGBs6dEV5nSLK4iJAFzaKNX3WFkxuQw=
 github.com/shanelex111/go-common v0.0.0-20250606093956-726770b998c3/go.mod h1:88Js+xz60rGFUZgAXx76CRQQq+GrK3BbBg8xmr6yY3U=
+github.com/shanelex111/go-common v0.0.0-20250613092307-de14d2510e88 h1:12m2/TWk3epSrQQX1RD7Cia1Na6xqIpojj/PUxhXQG4=
+github.com/shanelex111/go-common v0.0.0-20250613092307-de14d2510e88/go.mod h1:88Js+xz60rGFUZgAXx76CRQQq+GrK3BbBg8xmr6yY3U=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
 github.com/sourcegraph/conc v0.3.0/go.mod h1:Sdozi7LEKbFPqYX2/J+iBAM6HpqSLTASQIKqDmF7Mt0=
 github.com/spf13/afero v1.12.0 h1:UcOPyRBYczmFn6yvphxkn9ZEOY65cpwGKb5mL36mrqs=
