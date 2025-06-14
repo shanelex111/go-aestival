@@ -16,15 +16,49 @@ func Signin(c *gin.Context) {
 		return
 	}
 
-	// 1. 手机号&验证码登录
+	// 1. 手机号&验证码登录 | 邮箱&验证码登录| 手机号&密码登录 | 邮箱&密码登录
 
-	// 2. 手机号&密码登录
+	// 1.1 手机号&验证码校验
+	if req.SigninType == signinTypePhone && req.CheckType == checkTypeVerificationCode {
+		if req.PhoneCountryCode == "" || req.PhoneNumber == "" || req.VerificationCode == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		valid, err := verifyPhoneCode(req.PhoneCountryCode, req.PhoneNumber, req.VerificationCode)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if !valid {
+			response.Failed(c, error_code.AuthInvalidVerificationCode)
+			return
+		}
+	}
 
-	// 3. 邮箱&密码登录
+	// 1.2 邮箱&验证码校验
+	if req.SigninType == signinTypeEmail && req.CheckType == checkTypeVerificationCode {
+		if req.Email == "" || req.VerificationCode == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		valid, err := verifyEmailCode(req.Email, req.VerificationCode)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if !valid {
+			response.Failed(c, error_code.AuthInvalidVerificationCode)
+			return
+		}
+	}
 
-	// 4. 邮箱&验证码登录
+	// 2. 查询ip信息
 
-	// 5. 记录设备信息
+	// 3. 记录账户信息
+
+	// 4. 记录设备信息
+
+	// 5. 生成token
 
 }
 

@@ -17,6 +17,11 @@ var (
 		Code:    101401,
 		Message: http.StatusText(http.StatusUnauthorized),
 	}
+	AuthInvalidVerificationCode = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101402,
+		Message: "Invalid Verification Code",
+	}
 	AuthForbidden = &response.Error{
 		Status:  http.StatusForbidden,
 		Code:    101403,

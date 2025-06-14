@@ -2,6 +2,7 @@ package device
 
 import (
 	"errors"
+	"go-auth/internal/base"
 
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"gorm.io/gorm"
@@ -16,6 +17,9 @@ func SaveInEntity(e *DeviceEntity) error {
 			DeviceType:  e.DeviceType,
 			DeviceModel: e.DeviceModel,
 			AppVersion:  e.AppVersion,
+			BaseModelEntity: base.BaseModelEntity{
+				DeletedAt: 0,
+			},
 		}).Last(&entity).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			e.SigninTimes++

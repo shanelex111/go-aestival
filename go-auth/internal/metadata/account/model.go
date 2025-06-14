@@ -3,9 +3,9 @@ package account
 import "go-auth/internal/base"
 
 const (
-	StatusDeleted = -1
-	StatusDisable = 0
-	StatusEnable  = 1
+	statusDeleted = -1
+	statusDisable = 0
+	statusEnable  = 1
 )
 
 type AccountEntity struct {

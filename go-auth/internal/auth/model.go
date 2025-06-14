@@ -28,3 +28,6 @@ type deviceRequest struct {
 	Model      string `json:"model" binding:"required"`
 	AppVersion string `json:"app_version" binding:"required"`
 }
+
+type signinResponse struct {
+}
