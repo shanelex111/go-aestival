@@ -24,6 +24,8 @@ func Signin(c *gin.Context) {
 
 	// 4. 邮箱&验证码登录
 
+	// 5. 记录设备信息
+
 }
 
 func Signout(c *gin.Context) {
