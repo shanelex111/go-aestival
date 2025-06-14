@@ -39,7 +39,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/sagikazarmark/locafero v0.9.0 // indirect
-	github.com/shanelex111/go-common v0.0.0-20250614031026-5bd49fbb947a
+	github.com/shanelex111/go-common v0.0.0-20250614123239-bc2528cbbe41
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect

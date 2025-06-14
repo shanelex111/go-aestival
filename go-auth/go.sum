@@ -86,6 +86,10 @@ github.com/shanelex111/go-common v0.0.0-20250614025750-1694b828841e h1:rJuWiBzHd
 github.com/shanelex111/go-common v0.0.0-20250614025750-1694b828841e/go.mod h1:17izY4k+iRdMR8psn7eJ529sX1nHkX+am3Lb3iIi92s=
 github.com/shanelex111/go-common v0.0.0-20250614031026-5bd49fbb947a h1:/SHzsIvBEV0qnxVCL+ol+m71StM6en/qawFL/njlB7s=
 github.com/shanelex111/go-common v0.0.0-20250614031026-5bd49fbb947a/go.mod h1:17izY4k+iRdMR8psn7eJ529sX1nHkX+am3Lb3iIi92s=
+github.com/shanelex111/go-common v0.0.0-20250614122806-c42a8562fb20 h1:8Wu/IAK9y0zmX0WCiqnBednSo8jld61JsqifgYl0QIA=
+github.com/shanelex111/go-common v0.0.0-20250614122806-c42a8562fb20/go.mod h1:17izY4k+iRdMR8psn7eJ529sX1nHkX+am3Lb3iIi92s=
+github.com/shanelex111/go-common v0.0.0-20250614123239-bc2528cbbe41 h1:WNbBm09Z3whP4x85WIL3wg62MJh+HJPhVvssQF2o/xE=
+github.com/shanelex111/go-common v0.0.0-20250614123239-bc2528cbbe41/go.mod h1:17izY4k+iRdMR8psn7eJ529sX1nHkX+am3Lb3iIi92s=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=

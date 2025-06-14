@@ -1,5 +1,13 @@
 package auth
 
+const (
+	signinTypeEmail = "email"
+	signinTypePhone = "phone"
+
+	checkTypeVerificationCode = "verification_code"
+	checkTypePassword         = "password"
+)
+
 type signinRequest struct {
 	SigninType string `json:"signin_type" binding:"required"`
 	CheckType  string `json:"check_type" binding:"required"`
