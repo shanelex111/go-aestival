@@ -11,6 +11,7 @@ import (
 	"github.com/shanelex111/go-common/pkg/config"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"github.com/shanelex111/go-common/pkg/engine"
+	"github.com/shanelex111/go-common/pkg/log"
 	"github.com/shanelex111/go-common/pkg/server"
 )
 
@@ -23,6 +24,7 @@ func main() {
 
 	// 2. init server components - 初始化组件
 	server.Init(v,
+		log.Init,
 		engine.Init,
 		mysql.Init,
 		//redis.Init,

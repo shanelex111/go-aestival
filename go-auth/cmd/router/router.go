@@ -12,6 +12,7 @@ func Run() {
 	gin.SetMode(getGinMode())
 	r := gin.New()
 	r.Use(gin.Recovery())
+	r.Use(request.SetUUID())
 	r.Use(request.SetLogger())
 
 	authGroup := r.Group("/auth/v1")
