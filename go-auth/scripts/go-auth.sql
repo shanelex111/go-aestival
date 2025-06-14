@@ -8,8 +8,8 @@ IF EXISTS account;
     SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号国家代码，如+86，+1',
     `phone_number` VARCHAR (20) CHARACTER
     SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '手机号',
-    `password_hash` VARCHAR (255) CHARACTER
-    SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码哈希后的值',
+    `password` VARCHAR (255) CHARACTER
+    SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
     `status` TINYINT (1) NOT NULL DEFAULT '0' COMMENT '状态：1：enable，0：disable，-1：deleted',
     `signup_ip` VARCHAR (45) CHARACTER
     SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '注册ip',

@@ -17,10 +17,10 @@ func Run() {
 
 	authGroup := r.Group("/auth/v1")
 	{
-		authGroup.POST("/signup", auth.Signup)
 		authGroup.POST("/signin", auth.Signin)
 		authGroup.PUT("/refresh-token", auth.RefreshToken)
 		authGroup.DELETE("/signout", auth.Signout)
+		authGroup.PUT("/reset-password", auth.ResetPassword)
 
 		authGroup.POST("/send-code", auth.SendCode)
 		authGroup.POST("/verify-code", auth.VerifyCode)
