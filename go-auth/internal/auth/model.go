@@ -26,7 +26,7 @@ type deviceRequest struct {
 	ID         string `json:"id" binding:"required"`
 	Type       string `json:"type" binding:"required"`
 	Model      string `json:"model" binding:"required"`
-	AppVersion string `json:"app_version" binding:"required"`
+	AppVersion int    `json:"app_version" binding:"required"`
 }
 
 type signinResponse struct {
