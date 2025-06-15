@@ -31,3 +31,9 @@ type deviceRequest struct {
 
 type signinResponse struct {
 }
+
+type sendCodeRequest struct {
+}
+
+type sendCodeResponse struct {
+}
