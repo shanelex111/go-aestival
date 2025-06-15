@@ -14,6 +14,12 @@ func verifyEmailCode(email, code string) (bool, error) {
 }
 
 func verifyPhoneCode(phoneCountryCode, phoneNumber, code string) (bool, error) {
-
+	entity, err := verification_code.FindByPhoneInEntity(phoneCountryCode, phoneNumber, code)
+	if err != nil {
+		return false, err
+	}
+	if entity == nil {
+		return false, nil
+	}
 	return true, nil
 }
