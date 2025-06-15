@@ -14,12 +14,10 @@ func FindByEmailInEntity(email string) (*AccountEntity, error) {
 		Where(&AccountEntity{
 			Email:  email,
 			Status: statusEnable,
-			BaseModelEntity: base.BaseModelEntity{
-				DeletedAt: 0,
-			},
 		}).
+		Where("deleted_at = 0").
 		Last(&entity).Error; err != nil {
-		if errors.Is(gorm.ErrRecordNotFound, err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 		return nil, err
@@ -32,13 +30,13 @@ func FindByIDInEntity(id uint) (*AccountEntity, error) {
 	if err := mysql.DB.
 		Where(&AccountEntity{
 			BaseModelEntity: base.BaseModelEntity{
-				ID:        id,
-				DeletedAt: 0,
+				ID: id,
 			},
 			Status: statusEnable,
 		}).
+		Where("deleted_at = 0").
 		Last(&entity).Error; err != nil {
-		if errors.Is(gorm.ErrRecordNotFound, err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 		return nil, err
