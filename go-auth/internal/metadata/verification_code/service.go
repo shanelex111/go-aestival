@@ -60,3 +60,37 @@ func (e *VerificationCodeEntity) FindLastInEntity() (*VerificationCodeEntity, er
 	}
 	return &entity, nil
 }
+
+func (e *VerificationCodeEntity) CountInEntity() (int64, error) {
+	var (
+		condition = &VerificationCodeEntity{
+			Type:   e.Type,
+			Target: e.Target,
+		}
+		count int64
+	)
+
+	if e.Type == base.SendCodeTypePhone {
+		condition.CountryCode = e.CountryCode
+	}
+
+	if err := mysql.DB.Model(&VerificationCodeEntity{}).Where(condition).Where("deleted_at = 0").Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
+	var (
+		condition = &VerificationCodeEntity{
+			Type:   e.Type,
+			Target: e.Target,
+			Status: e.Status,
+		}
+	)
+	if e.Type == base.SendCodeTypePhone {
+		condition.CountryCode = e.CountryCode
+	}
+
+	return mysql.DB.Model(&VerificationCodeEntity{}).Where(condition).Where("deleted_at = 0").Update("status", StatusExpired).Error
+}

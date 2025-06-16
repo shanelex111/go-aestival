@@ -188,6 +188,7 @@ func SendCode(c *gin.Context) {
 		Type:   req.Type,
 		Status: verification_code.StatusPending,
 	}
+
 	switch req.Type {
 	case base.SendCodeTypeEmail:
 		if req.Email == "" {
@@ -208,6 +209,7 @@ func SendCode(c *gin.Context) {
 		return
 	}
 
+	// 查询出最近一次pending验证码
 	foundEntity, err := queryEntity.FindLastInEntity()
 	if err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
@@ -221,8 +223,21 @@ func SendCode(c *gin.Context) {
 	}
 
 	// 是否超出限制
+	count, err := queryEntity.CountInEntity()
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if count >= int64(verification_code.GetLimited()) {
+		response.Failed(c, error_code.AuthVerificationCodeLimited)
+		return
+	}
 
 	// 过期所有pending
+	if err := queryEntity.ExpiredAllInEntity(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
 	// 创建验证码
 }
