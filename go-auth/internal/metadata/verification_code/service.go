@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go-auth/internal/base"
 
+	"github.com/shanelex111/go-common/pkg/cache/redis"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"gorm.io/gorm"
 )
@@ -89,4 +90,17 @@ func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
 
 func (e *VerificationCodeEntity) SaveInEntity() error {
 	return mysql.DB.Save(e).Error
+}
+
+func (e *VerificationCodeEntity) SaveInCache() error {
+	var (
+		redisKey = cfg.Cache.Prefix + e.Type + ":"
+	)
+
+	if e.Type == base.SendCodeTypePhone {
+		redisKey += e.CountryCode + ":" + e.Target
+	} else {
+		redisKey += e.Target
+	}
+	return redis.RDB.Set(redis.Ctx, redisKey, e.Code, cfg.Period).Err()
 }

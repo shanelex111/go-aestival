@@ -45,30 +45,23 @@ IF EXISTS account;
     DROP TABLE
     IF EXISTS verification_code;
       CREATE TABLE `verification_code` (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键id',
-        `account_id` INT UNSIGNED NOT NULL COMMENT '账户id',
-        `type` VARCHAR (10) NOT NULL COMMENT '类型，email | phone',
-        `target` VARCHAR (100) CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '邮箱/手机号',
-        `country_code` VARCHAR (8) NOT NULL COMMENT '国家码',
-        `code` VARCHAR (10) CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '验证码',
-        `status` ENUM ('pending', 'used', 'expired') CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '状态：pending | used | expired',
-        `expired_at` BIGINT UNSIGNED NOT NULL COMMENT '过期时间，毫秒时间戳',
-        `created_at` BIGINT UNSIGNED NOT NULL COMMENT '创建时间，毫秒时间戳',
-        `updated_at` BIGINT UNSIGNED NOT NULL COMMENT '更新时间，毫秒时间戳',
-        `deleted_at` BIGINT UNSIGNED NOT NULL COMMENT '注销时间，毫秒时间戳',
-        `platform` VARCHAR (20) CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '第三方：aliyun | tencent',
-        `template_id` VARCHAR (100) CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '模版id',
-        `content` TEXT NOT NULL COMMENT '发送内容',
+        `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+        `type` varchar(10) NOT NULL COMMENT '类型，email | phone',
+        `target` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '邮箱/手机号',
+        `country_code` varchar(8) NOT NULL COMMENT '国家码',
+        `code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '验证码',
+        `status` enum('pending','used','expired') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '状态：pending | used | expired',
+        `expired_at` bigint unsigned NOT NULL COMMENT '过期时间，毫秒时间戳',
+        `created_at` bigint unsigned NOT NULL COMMENT '创建时间，毫秒时间戳',
+        `updated_at` bigint unsigned NOT NULL COMMENT '更新时间，毫秒时间戳',
+        `deleted_at` bigint unsigned NOT NULL COMMENT '注销时间，毫秒时间戳',
+        `platform` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '第三方：aliyun | tencent',
+        `template_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '模版id',
+        `content` text NOT NULL COMMENT '发送内容',
         PRIMARY KEY (`id`),
-        KEY `idx_account_id` (`account_id`) USING BTREE,
-        KEY `idx_target_type` (`type`, `target`) USING BTREE,
-        KEY `idx_target_country` (`target`, `country_code`) USING BTREE
-      ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '验证码表';
+        KEY `idx_target_type` (`type`,`target`) USING BTREE,
+        KEY `idx_target_country` (`target`,`country_code`) USING BTREE
+      ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='验证码表';
 
 DROP TABLE IF EXISTS `account_platform`;
 CREATE TABLE `account_platform` (

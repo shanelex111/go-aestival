@@ -10,8 +10,12 @@ redis:
   addrs:
     - 127.0.0.1:6379
     - 127.0.0.1:6380
+    - 127.0.0.1:6381
+    - 127.0.0.1:6382
+    - 127.0.0.1:6383
+    - 127.0.0.1:6384
   username: ""
-  password: ""
+  password: "bitnami"
   pool_size: 10
 
 log:
@@ -31,3 +35,5 @@ verification_code:
   number: 6
   limited: 10
   period: 10m
+  cache:
+    prefix: "auth:verification_code:"

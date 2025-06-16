@@ -8,6 +8,7 @@ import (
 	"go-auth/internal/metadata/device"
 	"go-auth/internal/metadata/verification_code"
 
+	"github.com/shanelex111/go-common/pkg/cache/redis"
 	"github.com/shanelex111/go-common/pkg/config"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"github.com/shanelex111/go-common/pkg/engine"
@@ -28,7 +29,7 @@ func main() {
 		log.Init,
 		engine.Init,
 		mysql.Init,
-		//redis.Init,
+		redis.Init,
 		geo.Init,
 	)
 

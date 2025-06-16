@@ -10,7 +10,6 @@ const (
 
 type VerificationCodeEntity struct {
 	base.BaseModelEntity
-	AccountID   uint   `gorm:"column:account_id;type:int unsigned not null;comment:账户id"`
 	Type        string `gorm:"column:type;type:varchar(10) not null;comment:类型，email | phone"`
 	Target      string `gorm:"column:target;type:varchar(100) not null;comment:目标，邮箱或手机号"`
 	CountryCode string `gorm:"column:country_code;type:varchar(8) not null;comment:国家代码"`

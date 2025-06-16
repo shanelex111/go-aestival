@@ -20,6 +20,7 @@ type config struct {
 	Number       int                    `mapstructure:"number"`
 	Limited      int                    `mapstructure:"limited"`
 	Period       time.Duration          `mapstructure:"period"`
+	Cache        *base.BaseCacheConfig  `mapstructure:"cache"`
 }
 
 func Load(v *viper.Viper) {
