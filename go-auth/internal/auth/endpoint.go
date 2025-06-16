@@ -35,7 +35,7 @@ func Signin(c *gin.Context) {
 			return
 		}
 		if !valid {
-			response.Failed(c, error_code.AuthInvalidVerificationCode)
+			response.Failed(c, error_code.AuthVerificationCodeUnmatched)
 			return
 		}
 		accountEntity = &account.AccountEntity{
@@ -57,7 +57,7 @@ func Signin(c *gin.Context) {
 			return
 		}
 		if !valid {
-			response.Failed(c, error_code.AuthInvalidVerificationCode)
+			response.Failed(c, error_code.AuthVerificationCodeUnmatched)
 			return
 		}
 

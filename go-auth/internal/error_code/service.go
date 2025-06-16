@@ -20,7 +20,7 @@ var (
 	AuthInvalidPassword = &response.Error{
 		Status:  http.StatusUnauthorized,
 		Code:    101402,
-		Message: "Invalid consumer or password.",
+		Message: "Invalid Account Or Password",
 	}
 	AuthForbidden = &response.Error{
 		Status:  http.StatusForbidden,
@@ -33,10 +33,20 @@ var (
 		Message: http.StatusText(http.StatusNotFound),
 	}
 
-	AuthInvalidVerificationCode = &response.Error{
+	AuthVerificationCodeUnmatched = &response.Error{
 		Status:  http.StatusUnauthorized,
 		Code:    101405,
-		Message: "Invalid verification code.",
+		Message: "Verification Code Unmatched",
+	}
+	AuthVerificationCodeFrequency = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101406,
+		Message: "Send Verification Code Frequency",
+	}
+	AuthVerificationCodeLimited = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101407,
+		Message: "Send Verification Code Limited",
 	}
 
 	AuthInternalServerError = &response.Error{
