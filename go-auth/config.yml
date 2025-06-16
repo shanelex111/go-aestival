@@ -14,7 +14,6 @@ redis:
   password: ""
   pool_size: 10
 
-
 log:
   level: info
   filename: ./logs/app.log
@@ -22,3 +21,6 @@ log:
   max_age: 30
   max_backups: 3
   compress: true
+
+geo:
+  path: ./scripts/GeoLite2-City.mmdb

@@ -1,10 +1,14 @@
 package auth
 
 import (
+	"go-auth/internal/base"
 	"go-auth/internal/error_code"
+	"go-auth/internal/metadata/account"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shanelex111/go-common/pkg/response"
+	"github.com/shanelex111/go-common/pkg/util"
+	"github.com/shanelex111/go-common/third_party/geo"
 )
 
 func Signin(c *gin.Context) {
@@ -17,9 +21,10 @@ func Signin(c *gin.Context) {
 	}
 
 	// 1. 手机号&验证码登录 | 邮箱&验证码登录| 手机号&密码登录 | 邮箱&密码登录
+	var accountEntity *account.AccountEntity
 
 	// 1.1 手机号&验证码校验
-	if req.SigninType == signinTypePhone && req.CheckType == checkTypeVerificationCode {
+	if req.SigninType == base.SigninTypePhone && req.CheckType == base.CheckTypeVerificationCode {
 		if req.PhoneCountryCode == "" || req.PhoneNumber == "" || req.VerificationCode == "" {
 			response.Failed(c, error_code.AuthBadRequest)
 			return
@@ -33,10 +38,15 @@ func Signin(c *gin.Context) {
 			response.Failed(c, error_code.AuthInvalidVerificationCode)
 			return
 		}
+		accountEntity = &account.AccountEntity{
+			PhoneCountryCode: req.PhoneCountryCode,
+			PhoneNumber:      req.PhoneNumber,
+			Status:           account.StatusEnable,
+		}
 	}
 
 	// 1.2 邮箱&验证码校验
-	if req.SigninType == signinTypeEmail && req.CheckType == checkTypeVerificationCode {
+	if req.SigninType == base.SigninTypeEmail && req.CheckType == base.CheckTypeVerificationCode {
 		if req.Email == "" || req.VerificationCode == "" {
 			response.Failed(c, error_code.AuthBadRequest)
 			return
@@ -50,11 +60,22 @@ func Signin(c *gin.Context) {
 			response.Failed(c, error_code.AuthInvalidVerificationCode)
 			return
 		}
+
+		accountEntity = &account.AccountEntity{
+			Email:  req.Email,
+			Status: account.StatusEnable,
+		}
 	}
 
-	// 2. 查询ip信息
+	// 2. 记录账户信息
+	account.SaveInEntity(accountEntity, req.SigninType, req.CheckType)
 
-	// 3. 记录账户信息
+	// 3. 查询ip信息
+	_, err := geo.GetCity(util.GetIP(c))
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
 	// 4. 记录设备信息
 

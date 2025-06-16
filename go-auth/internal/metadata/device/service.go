@@ -24,15 +24,19 @@ func SaveInEntity(e *DeviceEntity) error {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			e.SigninTimes++
 			e.CreatedIP = e.UpdatedIP
+			e.CreatedIPContinentCode = e.UpdatedIPContinentCode
 			e.CreatedIPCountryCode = e.UpdatedIPCountryCode
 			e.CreatedIPSubdivisionCode = e.UpdatedIPSubdivisionCode
+			e.CreatedIPCityName = e.UpdatedIPCityName
 			return mysql.DB.Save(e).Error
 		}
 		return err
 	}
 	entity.SigninTimes++
 	entity.UpdatedIP = e.UpdatedIP
+	entity.UpdatedIPContinentCode = e.UpdatedIPContinentCode
 	entity.UpdatedIPCountryCode = e.UpdatedIPCountryCode
 	entity.UpdatedIPSubdivisionCode = e.UpdatedIPSubdivisionCode
+	entity.UpdatedIPCityName = e.UpdatedIPCityName
 	return mysql.DB.Save(entity).Error
 }

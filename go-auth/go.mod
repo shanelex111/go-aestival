@@ -4,11 +4,13 @@ go 1.24.2
 
 require (
 	github.com/gin-gonic/gin v1.10.1
-	github.com/shanelex111/go-common v0.0.0-20250614123239-bc2528cbbe41
+	github.com/shanelex111/go-common v0.0.0-20250616022709-3fcaacfd2205
 	github.com/spf13/viper v1.20.1
 )
 
 require (
+	github.com/oschwald/geoip2-golang v1.11.0 // indirect
+	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect

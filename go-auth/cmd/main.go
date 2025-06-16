@@ -13,6 +13,7 @@ import (
 	"github.com/shanelex111/go-common/pkg/engine"
 	"github.com/shanelex111/go-common/pkg/log"
 	"github.com/shanelex111/go-common/pkg/server"
+	"github.com/shanelex111/go-common/third_party/geo"
 )
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 		engine.Init,
 		mysql.Init,
 		//redis.Init,
+		geo.Init,
 	)
 
 	// 3. load service configs - 加载业务配置
