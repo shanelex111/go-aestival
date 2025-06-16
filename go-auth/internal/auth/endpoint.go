@@ -7,6 +7,7 @@ import (
 	"go-auth/internal/metadata/account"
 	"go-auth/internal/metadata/device"
 	"go-auth/internal/metadata/verification_code"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -260,6 +261,7 @@ func SendCode(c *gin.Context) {
 		return
 	}
 
+	c.AbortWithStatus(http.StatusOK)
 }
 
 func VerifyCode(c *gin.Context) {
