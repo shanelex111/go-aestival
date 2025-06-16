@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SaveInEntity(e *AccountEntity, signinType, checkType string) error {
+func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 	var (
 		entity    *AccountEntity
 		condition *AccountEntity
@@ -60,6 +60,7 @@ func SaveInEntity(e *AccountEntity, signinType, checkType string) error {
 		return err
 	}
 
+	e = entity
 	return mysql.DB.Save(entity).Error
 }
 

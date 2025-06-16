@@ -8,7 +8,7 @@ type DeviceEntity struct {
 	DeviceID    string `gorm:"column:device_id;type:varchar(255) not null;comment:设备id"`
 	DeviceType  string `gorm:"column:device_type;type:varchar(10) not null;comment:设备类型"`
 	DeviceModel string `gorm:"column:device_model;type:varchar(255) not null;comment:设备型号"`
-	AppVersion  string `gorm:"column:app_version;type:int unsigned not null;comment:app版本"`
+	AppVersion  int    `gorm:"column:app_version;type:int unsigned not null;comment:app版本"`
 	SigninTimes int    `gorm:"column:signin_times;type:int unsigned not null;default:0;comment:该设备总登录次数"`
 
 	CreatedIP                string `gorm:"column:created_ip;type:varchar(45) not null;comment:首次使用该设备登录时IP"`

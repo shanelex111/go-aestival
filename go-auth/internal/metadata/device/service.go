@@ -2,13 +2,12 @@ package device
 
 import (
 	"errors"
-	"go-auth/internal/base"
 
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"gorm.io/gorm"
 )
 
-func SaveInEntity(e *DeviceEntity) error {
+func (e *DeviceEntity) SaveInEntity() error {
 	var entity *DeviceEntity
 	if err := mysql.DB.Where(
 		&DeviceEntity{
@@ -17,10 +16,7 @@ func SaveInEntity(e *DeviceEntity) error {
 			DeviceType:  e.DeviceType,
 			DeviceModel: e.DeviceModel,
 			AppVersion:  e.AppVersion,
-			BaseModelEntity: base.BaseModelEntity{
-				DeletedAt: 0,
-			},
-		}).Last(&entity).Error; err != nil {
+		}).Where("deleted_at = 0").Last(&entity).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			e.SigninTimes++
 			e.CreatedIP = e.UpdatedIP
@@ -38,5 +34,6 @@ func SaveInEntity(e *DeviceEntity) error {
 	entity.UpdatedIPCountryCode = e.UpdatedIPCountryCode
 	entity.UpdatedIPSubdivisionCode = e.UpdatedIPSubdivisionCode
 	entity.UpdatedIPCityName = e.UpdatedIPCityName
+	e = entity
 	return mysql.DB.Save(entity).Error
 }

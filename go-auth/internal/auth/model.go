@@ -25,6 +25,10 @@ type signinResponse struct {
 }
 
 type sendCodeRequest struct {
+	Type             string `json:"type" binding:"required"`
+	Email            string `json:"email"`
+	PhoneCountryCode string `json:"phone_country_code"`
+	PhoneNumber      string `json:"phone_number"`
 }
 
 type sendCodeResponse struct {

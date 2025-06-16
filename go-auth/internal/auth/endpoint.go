@@ -1,9 +1,13 @@
 package auth
 
 import (
+	"fmt"
 	"go-auth/internal/base"
 	"go-auth/internal/error_code"
 	"go-auth/internal/metadata/account"
+	"go-auth/internal/metadata/device"
+	"go-auth/internal/metadata/verification_code"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shanelex111/go-common/pkg/response"
@@ -115,18 +119,42 @@ func Signin(c *gin.Context) {
 	}
 
 	// 2. 记录账户信息
-	account.SaveInEntity(accountEntity, req.SigninType, req.CheckType)
+	if err := accountEntity.SaveInEntity(req.SigninType, req.CheckType); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
 	// 3. 查询ip信息
-	_, err := geo.GetCity(util.GetIP(c))
+	geoCity, err := geo.GetCity(util.GetIP(c))
 	if err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return
 	}
 
 	// 4. 记录设备信息
+	deviceEntity := device.DeviceEntity{
+		AccountID:   accountEntity.ID,
+		DeviceID:    req.Device.ID,
+		DeviceType:  req.Device.Type,
+		DeviceModel: req.Device.Model,
+		AppVersion:  req.Device.AppVersion,
+	}
+
+	if geoCity != nil {
+		deviceEntity.UpdatedIP = geoCity.IP
+		deviceEntity.UpdatedIPContinentCode = geoCity.ContinentCode
+		deviceEntity.UpdatedIPCountryCode = geoCity.CountryCode
+		deviceEntity.UpdatedIPSubdivisionCode = geoCity.SubvisionCode
+		deviceEntity.UpdatedIPCityName = geoCity.CityName
+	}
+
+	if err := deviceEntity.SaveInEntity(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
 	// 5. 生成token
+	fmt.Println(deviceEntity)
 
 }
 
@@ -150,7 +178,53 @@ func DeleteAccount(c *gin.Context) {
 
 }
 func SendCode(c *gin.Context) {
+	var req sendCodeRequest
+	if err := c.ShouldBind(&req); err != nil {
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
 
+	queryEntity := &verification_code.VerificationCodeEntity{
+		Type:   req.Type,
+		Status: verification_code.StatusPending,
+	}
+	switch req.Type {
+	case base.SendCodeTypeEmail:
+		if req.Email == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		queryEntity.Target = req.Email
+	case base.SendCodeTypePhone:
+		if req.PhoneCountryCode == "" || req.PhoneNumber == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+
+		queryEntity.Target = req.PhoneNumber
+		queryEntity.CountryCode = req.PhoneCountryCode
+	default:
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
+
+	foundEntity, err := queryEntity.FindLastInEntity()
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if foundEntity != nil {
+		if time.Now().UnixMilli() <= foundEntity.ExpiredAt {
+			response.Failed(c, error_code.AuthVerificationCodeFrequency)
+			return
+		}
+	}
+
+	// 是否超出限制
+
+	// 过期所有pending
+
+	// 创建验证码
 }
 
 func VerifyCode(c *gin.Context) {

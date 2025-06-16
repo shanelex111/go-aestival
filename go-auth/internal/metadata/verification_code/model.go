@@ -3,9 +3,9 @@ package verification_code
 import "go-auth/internal/base"
 
 const (
-	statusPending = "pending"
-	statusUsed    = "used"
-	statusExpired = "expired"
+	StatusPending = "pending"
+	StatusUsed    = "used"
+	StatusExpired = "expired"
 )
 
 type VerificationCodeEntity struct {

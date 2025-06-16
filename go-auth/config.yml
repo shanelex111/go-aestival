@@ -24,3 +24,10 @@ log:
 
 geo:
   path: ./scripts/GeoLite2-City.mmdb
+
+verification_code:
+  entity:
+    table_name: verification_code
+  numer: 6
+  limited: 10
+  period: 10m

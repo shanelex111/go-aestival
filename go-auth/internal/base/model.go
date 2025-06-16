@@ -5,6 +5,9 @@ const (
 	SigninTypePhone           = "phone"
 	CheckTypeVerificationCode = "verification_code"
 	CheckTypePassword         = "password"
+
+	SendCodeTypeEmail = "email"
+	SendCodeTypePhone = "phone"
 )
 
 type BaseModelEntity struct {

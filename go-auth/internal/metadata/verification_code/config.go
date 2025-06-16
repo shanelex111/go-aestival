@@ -2,6 +2,7 @@ package verification_code
 
 import (
 	"go-auth/internal/base"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -16,6 +17,9 @@ var (
 
 type config struct {
 	ConfigEntity *base.BaseConfigEntity `mapstructure:"entity"`
+	Number       int                    `mapstructure:"number"`
+	Limited      int                    `mapstructure:"limited"`
+	Period       time.Duration          `mapstructure:"period"`
 }
 
 func Load(v *viper.Viper) {
