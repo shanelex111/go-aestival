@@ -9,6 +9,38 @@ data:
       port: 80
       # 环境 dev | test | pre-prod | release
       mode: dev
-      
+
     mysql:
-      dsn: user:password@tcp(mysql:3306)/go_auth?charset=utf8mb4&parseTime=True&loc=Local
+      dsn: root:root123456@tcp(127.0.0.1:3306)/go-auth?charset=utf8mb4&parseTime=True&loc=Local
+
+    redis:
+      addrs:
+        - 127.0.0.1:6379
+        - 127.0.0.1:6380
+        - 127.0.0.1:6381
+        - 127.0.0.1:6382
+        - 127.0.0.1:6383
+        - 127.0.0.1:6384
+      username: ""
+      password: "bitnami"
+      pool_size: 10
+
+    log:
+      level: info
+      filename: ./logs/app.log
+      max_size: 100
+      max_age: 30
+      max_backups: 3
+      compress: true
+
+    geo:
+      path: ./scripts/GeoLite2-City.mmdb
+
+    verification_code:
+      entity:
+        table_name: verification_code
+      number: 6
+      limited: 10
+      period: 10m
+      cache:
+        prefix: "auth:verification_code:"
