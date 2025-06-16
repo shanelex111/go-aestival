@@ -240,6 +240,7 @@ func SendCode(c *gin.Context) {
 	}
 
 	// 创建验证码
+	util.GetRandomNumber(verification_code.GetNumber())
 }
 
 func VerifyCode(c *gin.Context) {

@@ -8,29 +8,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindByEmailInEntity(email, code string) (*VerificationCodeEntity, error) {
-	var entity VerificationCodeEntity
-	if err := mysql.DB.Where(&VerificationCodeEntity{
-		Target: email,
-		Code:   code,
-		Status: StatusUsed,
-	}).Where("deleted_at = 0").Last(&entity).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+func (e *VerificationCodeEntity) FindInEntity() (*VerificationCodeEntity, error) {
+	var (
+		entity    VerificationCodeEntity
+		condition = &VerificationCodeEntity{
+			Type:   e.Type,
+			Status: e.Status,
+			Target: e.Target,
+			Code:   e.Code,
 		}
-		return nil, err
+	)
+	if e.Type == base.SendCodeTypePhone {
+		condition.CountryCode = e.CountryCode
 	}
-	return &entity, nil
-}
 
-func FindByPhoneInEntity(phoneCountryCode, phoneNumber, code string) (*VerificationCodeEntity, error) {
-	var entity VerificationCodeEntity
-	if err := mysql.DB.Where(&VerificationCodeEntity{
-		CountryCode: phoneCountryCode,
-		Target:      phoneNumber,
-		Code:        code,
-		Status:      StatusUsed,
-	}).Where("deleted_at = 0").Last(&entity).Error; err != nil {
+	if err := mysql.DB.Where(condition).Where("deleted_at = 0").Last(&entity).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}

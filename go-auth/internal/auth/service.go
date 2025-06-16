@@ -1,9 +1,18 @@
 package auth
 
-import "go-auth/internal/metadata/verification_code"
+import (
+	"go-auth/internal/base"
+	"go-auth/internal/metadata/verification_code"
+)
 
 func verifyEmailCode(email, code string) (bool, error) {
-	entity, err := verification_code.FindByEmailInEntity(email, code)
+	queryEntity := &verification_code.VerificationCodeEntity{
+		Type:   base.SendCodeTypeEmail,
+		Code:   code,
+		Target: email,
+		Status: verification_code.StatusUsed,
+	}
+	entity, err := queryEntity.FindInEntity()
 	if err != nil {
 		return false, err
 	}
@@ -14,7 +23,14 @@ func verifyEmailCode(email, code string) (bool, error) {
 }
 
 func verifyPhoneCode(phoneCountryCode, phoneNumber, code string) (bool, error) {
-	entity, err := verification_code.FindByPhoneInEntity(phoneCountryCode, phoneNumber, code)
+	queryEntity := &verification_code.VerificationCodeEntity{
+		Type:        base.SendCodeTypeEmail,
+		Code:        code,
+		Target:      phoneNumber,
+		CountryCode: phoneCountryCode,
+		Status:      verification_code.StatusUsed,
+	}
+	entity, err := queryEntity.FindInEntity()
 	if err != nil {
 		return false, err
 	}

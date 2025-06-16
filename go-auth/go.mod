@@ -4,7 +4,7 @@ go 1.24.2
 
 require (
 	github.com/gin-gonic/gin v1.10.1
-	github.com/shanelex111/go-common v0.0.0-20250616022709-3fcaacfd2205
+	github.com/shanelex111/go-common v0.0.0-20250616071244-3ecf0ac503b2
 	github.com/spf13/viper v1.20.1
 )
 

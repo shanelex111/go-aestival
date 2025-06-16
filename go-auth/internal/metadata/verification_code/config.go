@@ -44,3 +44,7 @@ func initConfig(v *viper.Viper) {
 func GetLimited() int {
 	return cfg.Limited
 }
+
+func GetNumber() int {
+	return cfg.Number
+}
