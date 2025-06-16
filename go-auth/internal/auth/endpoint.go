@@ -240,7 +240,17 @@ func SendCode(c *gin.Context) {
 	}
 
 	// 创建验证码
-	util.GetRandomNumber(verification_code.GetNumber())
+	code := util.GetRandomNumber(verification_code.GetNumber())
+
+	queryEntity.Code = code
+	queryEntity.Status = verification_code.StatusPending
+	queryEntity.ExpiredAt = time.Now().UnixMilli() + verification_code.GetPerid()
+
+	if err := queryEntity.SaveInEntity(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
 }
 
 func VerifyCode(c *gin.Context) {

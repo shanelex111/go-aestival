@@ -53,8 +53,8 @@ IF EXISTS account;
         `country_code` VARCHAR (8) NOT NULL COMMENT '国家码',
         `code` VARCHAR (10) CHARACTER
         SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '验证码',
-        `status` ENUM ('created', 'used', 'expired') CHARACTER
-        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '状态：created | used | expired',
+        `status` ENUM ('pending', 'used', 'expired') CHARACTER
+        SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '状态：pending | used | expired',
         `expired_at` BIGINT UNSIGNED NOT NULL COMMENT '过期时间，毫秒时间戳',
         `created_at` BIGINT UNSIGNED NOT NULL COMMENT '创建时间，毫秒时间戳',
         `updated_at` BIGINT UNSIGNED NOT NULL COMMENT '更新时间，毫秒时间戳',

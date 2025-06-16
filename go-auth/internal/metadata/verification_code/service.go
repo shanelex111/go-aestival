@@ -86,3 +86,7 @@ func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
 
 	return mysql.DB.Model(&VerificationCodeEntity{}).Where(condition).Where("deleted_at = 0").Update("status", StatusExpired).Error
 }
+
+func (e *VerificationCodeEntity) SaveInEntity() error {
+	return mysql.DB.Save(e).Error
+}

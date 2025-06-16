@@ -28,6 +28,6 @@ geo:
 verification_code:
   entity:
     table_name: verification_code
-  numer: 6
+  number: 6
   limited: 10
   period: 10m

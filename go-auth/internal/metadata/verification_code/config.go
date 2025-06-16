@@ -48,3 +48,7 @@ func GetLimited() int {
 func GetNumber() int {
 	return cfg.Number
 }
+
+func GetPerid() int64 {
+	return cfg.Period.Milliseconds()
+}
