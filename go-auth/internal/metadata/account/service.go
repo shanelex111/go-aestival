@@ -5,6 +5,7 @@ import (
 	"go-auth/internal/base"
 
 	"github.com/shanelex111/go-common/pkg/db/mysql"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -60,4 +61,53 @@ func SaveInEntity(e *AccountEntity, signinType, checkType string) error {
 	}
 
 	return mysql.DB.Save(entity).Error
+}
+
+func (e *AccountEntity) SetPassword(pw string) error {
+	hashed, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	e.Password = string(hashed)
+	return nil
+}
+
+func (e *AccountEntity) CheckPassword(pw string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(e.Password), []byte(pw)) == nil
+}
+
+func FindByEmailInEntity(email string) (*AccountEntity, error) {
+	var entity AccountEntity
+	if err := mysql.DB.
+		Where(&AccountEntity{
+			Email:  email,
+			Status: StatusEnable,
+		}).
+		Where("deleted_at = 0").
+		Last(&entity).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &entity, nil
+}
+
+func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*AccountEntity, error) {
+	var entity AccountEntity
+	if err := mysql.DB.
+		Where(&AccountEntity{
+			PhoneCountryCode: phoneCountryCode,
+			PhoneNumber:      phoneNumber,
+			Status:           StatusEnable,
+		}).
+		Where("deleted_at = 0").
+		Last(&entity).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &entity, nil
+
 }

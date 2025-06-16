@@ -67,6 +67,53 @@ func Signin(c *gin.Context) {
 		}
 	}
 
+	// 1.3 手机号&密码校验
+	if req.SigninType == base.SigninTypePhone && req.CheckType == base.CheckTypePassword {
+		if req.PhoneCountryCode == "" || req.PhoneNumber == "" || req.Password == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		// 查询账户是否存在
+		foundEntity, err := account.FindByPhoneInEntity(req.PhoneCountryCode, req.PhoneNumber)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		// 校验密码
+		if foundEntity != nil {
+			if !foundEntity.CheckPassword(req.Password) {
+				response.Failed(c, error_code.AuthInvalidPassword)
+				return
+			}
+			accountEntity = foundEntity
+		}
+
+	}
+
+	// 1.4 邮箱&密码校验
+	if req.SigninType == base.SigninTypeEmail && req.CheckType == base.CheckTypePassword {
+		if req.Email == "" || req.Password == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+
+		// 查询账户是否存在
+		foundEntity, err := account.FindByEmailInEntity(req.Email)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+
+		// 校验密码
+		if foundEntity != nil {
+			if !foundEntity.CheckPassword(req.Password) {
+				response.Failed(c, error_code.AuthInvalidPassword)
+				return
+			}
+			accountEntity = foundEntity
+		}
+	}
+
 	// 2. 记录账户信息
 	account.SaveInEntity(accountEntity, req.SigninType, req.CheckType)
 
@@ -91,6 +138,15 @@ func RefreshToken(c *gin.Context) {
 
 }
 func ResetPassword(c *gin.Context) {
+
+}
+func UpdateAvatar(c *gin.Context) {
+
+}
+func UpdateNickname(c *gin.Context) {
+
+}
+func DeleteAccount(c *gin.Context) {
 
 }
 func SendCode(c *gin.Context) {

@@ -17,16 +17,28 @@ var (
 		Code:    101401,
 		Message: http.StatusText(http.StatusUnauthorized),
 	}
-	AuthInvalidVerificationCode = &response.Error{
+	AuthInvalidPassword = &response.Error{
 		Status:  http.StatusUnauthorized,
 		Code:    101402,
-		Message: "Invalid Verification Code",
+		Message: "Invalid consumer or password.",
 	}
 	AuthForbidden = &response.Error{
 		Status:  http.StatusForbidden,
 		Code:    101403,
 		Message: http.StatusText(http.StatusForbidden),
 	}
+	AuthNotFound = &response.Error{
+		Status:  http.StatusNotFound,
+		Code:    101404,
+		Message: http.StatusText(http.StatusNotFound),
+	}
+
+	AuthInvalidVerificationCode = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101405,
+		Message: "Invalid verification code.",
+	}
+
 	AuthInternalServerError = &response.Error{
 		Status:  http.StatusInternalServerError,
 		Code:    101500,
