@@ -224,7 +224,7 @@ func SendCode(c *gin.Context) {
 	}
 
 	// 是否超出限制
-	count, err := queryEntity.CountInEntity()
+	count, err := queryEntity.CountTodayInEntity()
 	if err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return

@@ -6,6 +6,7 @@ import (
 
 	"github.com/shanelex111/go-common/pkg/cache/redis"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
+	"github.com/shanelex111/go-common/pkg/util"
 	"gorm.io/gorm"
 )
 
@@ -54,20 +55,25 @@ func (e *VerificationCodeEntity) FindLastInEntity() (*VerificationCodeEntity, er
 	return &entity, nil
 }
 
-func (e *VerificationCodeEntity) CountInEntity() (int64, error) {
+func (e *VerificationCodeEntity) CountTodayInEntity() (int64, error) {
 	var (
 		condition = &VerificationCodeEntity{
 			Type:   e.Type,
 			Target: e.Target,
 		}
-		count int64
+		count                int64
+		todayStart, todayEnd = util.GetTodayMilli()
 	)
 
 	if e.Type == base.SendCodeTypePhone {
 		condition.CountryCode = e.CountryCode
 	}
 
-	if err := mysql.DB.Model(&VerificationCodeEntity{}).Where(condition).Where("deleted_at = 0").Count(&count).Error; err != nil {
+	if err := mysql.DB.Model(&VerificationCodeEntity{}).
+		Where(condition).
+		Where("deleted_at = 0").
+		Where("created_at >= ? AND created_at <= ?", todayStart, todayEnd).
+		Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
