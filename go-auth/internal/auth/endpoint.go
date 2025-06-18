@@ -243,12 +243,12 @@ func SendCode(c *gin.Context) {
 	// 创建验证码
 	code := util.GetRandomNumber(verification_code.GetNumber())
 
-	// 调用第三方发送验证码
+	// TODO:调用第三方发送验证码
 
 	// 数据库存储
 	queryEntity.Code = code
 	queryEntity.Status = verification_code.StatusPending
-	queryEntity.ExpiredAt = time.Now().UnixMilli() + verification_code.GetPerid()
+	queryEntity.ExpiredAt = time.Now().UnixMilli() + verification_code.GetPeriod()
 
 	if err := queryEntity.SaveInEntity(); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
