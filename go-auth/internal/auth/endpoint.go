@@ -211,6 +211,16 @@ func SendCode(c *gin.Context) {
 	}
 
 	// 查询出最近一次pending验证码
+	result, err := queryEntity.FindInCache()
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if result != "" {
+		response.Failed(c, error_code.AuthVerificationCodeFrequency)
+		return
+	}
+
 	foundEntity, err := queryEntity.FindLastInEntity()
 	if err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
