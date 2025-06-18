@@ -39,8 +39,6 @@ github.com/go-playground/validator/v10 v10.26.0 h1:SP05Nqhjcvz81uJaRfEV0YBSSSGMc
 github.com/go-playground/validator/v10 v10.26.0/go.mod h1:I5QpIEbmr8On7W0TktmJAumgzX4CA1XNl4ZmDuVHKKo=
 github.com/go-sql-driver/mysql v1.9.3 h1:U/N249h2WzJ3Ukj8SowVFjdtZKfu9vlLZxjPXV1aweo=
 github.com/go-sql-driver/mysql v1.9.3/go.mod h1:qn46aNg1333BRMNU69Lq93t8du/dwxI64Gl8i5p1WMU=
-github.com/go-viper/mapstructure/v2 v2.2.1 h1:ZAaOCxANMuZx5RCeg0mBdEZk7DZasvvZIxtHqx8aGss=
-github.com/go-viper/mapstructure/v2 v2.2.1/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/go-viper/mapstructure/v2 v2.3.0 h1:27XbWsHIqhbdR5TIC911OfYvgSaW93HM+dX7970Q7jk=
 github.com/go-viper/mapstructure/v2 v2.3.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/goccy/go-json v0.10.5 h1:Fq85nIqj+gXn/S5ahsiTlK3TmC85qgirsdTP/+DeaC4=
@@ -75,8 +73,6 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/oschwald/geoip2-golang v1.11.0 h1:hNENhCn1Uyzhf9PTmquXENiWS6AlxAEnBII6r8krA3w=
 github.com/oschwald/geoip2-golang v1.11.0/go.mod h1:P9zG+54KPEFOliZ29i7SeYZ/GM6tfEL+rgSn03hYuUo=
-github.com/oschwald/maxminddb-golang v1.13.0 h1:R8xBorY71s84yO06NgTmQvqvTvlS/bnYZrrWX1MElnU=
-github.com/oschwald/maxminddb-golang v1.13.0/go.mod h1:BU0z8BfFVhi1LQaonTwwGQlsHUEu9pWNdMfmq4ztm0o=
 github.com/oschwald/maxminddb-golang v1.13.1 h1:G3wwjdN9JmIK2o/ermkHM+98oX5fS+k5MbwsmL4MRQE=
 github.com/oschwald/maxminddb-golang v1.13.1/go.mod h1:K4pgV9N/GcK694KSTmVSDTODk4IsCNThNdTmnaBZ/F8=
 github.com/pelletier/go-toml/v2 v2.2.4 h1:mye9XuhQ6gvn5h28+VilKrrPoQVanw5PMw/TB0t5Ec4=
@@ -89,16 +85,10 @@ github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0t
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/sagikazarmark/locafero v0.9.0 h1:GbgQGNtTrEmddYDSAH9QLRyfAHY12md+8YFTqyMTC9k=
 github.com/sagikazarmark/locafero v0.9.0/go.mod h1:UBUyz37V+EdMS3hDF3QWIiVr/2dPrx49OMO0Bn0hJqk=
-github.com/shanelex111/go-common v0.0.0-20250616071244-3ecf0ac503b2 h1:RO6/Lskhlko+xYEmgLzE5Nt3U8Jw7sIHUbJ9l931UxM=
-github.com/shanelex111/go-common v0.0.0-20250616071244-3ecf0ac503b2/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
-github.com/shanelex111/go-common v0.0.0-20250617141225-a3e20ecc0e4a h1:9v4e1JClZY5BVYJsYP7tRByeTosoo2YdQ3KancY5M/s=
-github.com/shanelex111/go-common v0.0.0-20250617141225-a3e20ecc0e4a/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
-github.com/shanelex111/go-common v0.0.0-20250618070756-9c27b7fe1653 h1:pWe/lS6uoTFv7UmYd9S6ClU1Tnoi7RfDutf0tP8f8WU=
-github.com/shanelex111/go-common v0.0.0-20250618070756-9c27b7fe1653/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
-github.com/shanelex111/go-common v0.0.0-20250618072923-70cf19a8e3d7 h1:wyJQV7JMT+BpyYaimy2bH1CQsp8JcA+2JTojto1LsXU=
-github.com/shanelex111/go-common v0.0.0-20250618072923-70cf19a8e3d7/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/shanelex111/go-common v0.0.0-20250618075451-eba993195907 h1:mcIT7MMAx5aleU7niOx2qBHr8CMKijXN6AoSpv8qE1g=
 github.com/shanelex111/go-common v0.0.0-20250618075451-eba993195907/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
+github.com/shanelex111/go-common v0.0.0-20250618092040-81a0ebd1b562 h1:0XQoKeP8PJb4m0KOWZu5Qf+im0Az2RPAlDXkjC/aT18=
+github.com/shanelex111/go-common v0.0.0-20250618092040-81a0ebd1b562/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
