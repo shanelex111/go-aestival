@@ -41,6 +41,8 @@ github.com/go-sql-driver/mysql v1.9.3 h1:U/N249h2WzJ3Ukj8SowVFjdtZKfu9vlLZxjPXV1
 github.com/go-sql-driver/mysql v1.9.3/go.mod h1:qn46aNg1333BRMNU69Lq93t8du/dwxI64Gl8i5p1WMU=
 github.com/go-viper/mapstructure/v2 v2.2.1 h1:ZAaOCxANMuZx5RCeg0mBdEZk7DZasvvZIxtHqx8aGss=
 github.com/go-viper/mapstructure/v2 v2.2.1/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
+github.com/go-viper/mapstructure/v2 v2.3.0 h1:27XbWsHIqhbdR5TIC911OfYvgSaW93HM+dX7970Q7jk=
+github.com/go-viper/mapstructure/v2 v2.3.0/go.mod h1:oJDH3BJKyqBA2TXFhDsKDGDTlndYOZ6rGS0BRZIxGhM=
 github.com/goccy/go-json v0.10.5 h1:Fq85nIqj+gXn/S5ahsiTlK3TmC85qgirsdTP/+DeaC4=
 github.com/goccy/go-json v0.10.5/go.mod h1:oq7eo15ShAhp70Anwd5lgX2pLfOS3QCiwU/PULtXL6M=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
@@ -75,6 +77,8 @@ github.com/oschwald/geoip2-golang v1.11.0 h1:hNENhCn1Uyzhf9PTmquXENiWS6AlxAEnBII
 github.com/oschwald/geoip2-golang v1.11.0/go.mod h1:P9zG+54KPEFOliZ29i7SeYZ/GM6tfEL+rgSn03hYuUo=
 github.com/oschwald/maxminddb-golang v1.13.0 h1:R8xBorY71s84yO06NgTmQvqvTvlS/bnYZrrWX1MElnU=
 github.com/oschwald/maxminddb-golang v1.13.0/go.mod h1:BU0z8BfFVhi1LQaonTwwGQlsHUEu9pWNdMfmq4ztm0o=
+github.com/oschwald/maxminddb-golang v1.13.1 h1:G3wwjdN9JmIK2o/ermkHM+98oX5fS+k5MbwsmL4MRQE=
+github.com/oschwald/maxminddb-golang v1.13.1/go.mod h1:K4pgV9N/GcK694KSTmVSDTODk4IsCNThNdTmnaBZ/F8=
 github.com/pelletier/go-toml/v2 v2.2.4 h1:mye9XuhQ6gvn5h28+VilKrrPoQVanw5PMw/TB0t5Ec4=
 github.com/pelletier/go-toml/v2 v2.2.4/go.mod h1:2gIqNv+qfxSVS7cM2xJQKtLSTLUE9V8t9Stt+h56mCY=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -89,6 +93,12 @@ github.com/shanelex111/go-common v0.0.0-20250616071244-3ecf0ac503b2 h1:RO6/Lskhl
 github.com/shanelex111/go-common v0.0.0-20250616071244-3ecf0ac503b2/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/shanelex111/go-common v0.0.0-20250617141225-a3e20ecc0e4a h1:9v4e1JClZY5BVYJsYP7tRByeTosoo2YdQ3KancY5M/s=
 github.com/shanelex111/go-common v0.0.0-20250617141225-a3e20ecc0e4a/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
+github.com/shanelex111/go-common v0.0.0-20250618070756-9c27b7fe1653 h1:pWe/lS6uoTFv7UmYd9S6ClU1Tnoi7RfDutf0tP8f8WU=
+github.com/shanelex111/go-common v0.0.0-20250618070756-9c27b7fe1653/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
+github.com/shanelex111/go-common v0.0.0-20250618072923-70cf19a8e3d7 h1:wyJQV7JMT+BpyYaimy2bH1CQsp8JcA+2JTojto1LsXU=
+github.com/shanelex111/go-common v0.0.0-20250618072923-70cf19a8e3d7/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
+github.com/shanelex111/go-common v0.0.0-20250618075451-eba993195907 h1:mcIT7MMAx5aleU7niOx2qBHr8CMKijXN6AoSpv8qE1g=
+github.com/shanelex111/go-common v0.0.0-20250618075451-eba993195907/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
