@@ -60,7 +60,6 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 		return err
 	}
 
-	e = entity
 	return mysql.DB.Save(entity).Error
 }
 
