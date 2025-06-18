@@ -48,6 +48,11 @@ var (
 		Code:    101407,
 		Message: "Send Verification Code Limited",
 	}
+	AuthVerificationCodeExpired = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101408,
+		Message: "Verification Code Expired",
+	}
 
 	AuthInternalServerError = &response.Error{
 		Status:  http.StatusInternalServerError,

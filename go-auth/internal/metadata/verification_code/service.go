@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go-auth/internal/base"
 
+	goredis "github.com/redis/go-redis/v9"
 	"github.com/shanelex111/go-common/pkg/cache/redis"
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"github.com/shanelex111/go-common/pkg/util"
@@ -109,4 +110,36 @@ func (e *VerificationCodeEntity) SaveInCache() error {
 		redisKey += e.Target
 	}
 	return redis.RDB.Set(redis.Ctx, redisKey, e.Code, cfg.Period).Err()
+}
+
+func (e *VerificationCodeEntity) DeleteInCache() error {
+	var (
+		redisKey = cfg.Cache.Prefix + e.Type + ":"
+	)
+
+	if e.Type == base.SendCodeTypePhone {
+		redisKey += e.CountryCode + ":" + e.Target
+	} else {
+		redisKey += e.Target
+	}
+	return redis.RDB.Del(redis.Ctx, redisKey).Err()
+}
+
+func (e *VerificationCodeEntity) FindInCache() (string, error) {
+	var (
+		redisKey = cfg.Cache.Prefix + e.Type + ":"
+	)
+
+	if e.Type == base.SendCodeTypePhone {
+		redisKey += e.CountryCode + ":" + e.Target
+	} else {
+		redisKey += e.Target
+	}
+	result, err := redis.RDB.Get(redis.Ctx, redisKey).Result()
+	if err != nil {
+		if !errors.Is(err, goredis.Nil) {
+			return "", err
+		}
+	}
+	return result, nil
 }

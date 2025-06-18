@@ -27,3 +27,8 @@ type sendCodeRequest struct {
 	PhoneCountryCode string `json:"phone_country_code"`
 	PhoneNumber      string `json:"phone_number"`
 }
+
+type verifyCodeRequest struct {
+	sendCodeRequest
+	Code string `json:"code" binding:"required"`
+}

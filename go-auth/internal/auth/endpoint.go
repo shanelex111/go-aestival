@@ -265,5 +265,75 @@ func SendCode(c *gin.Context) {
 }
 
 func VerifyCode(c *gin.Context) {
+	var req verifyCodeRequest
+	if err := c.ShouldBind(&req); err != nil {
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
 
+	queryEntity := &verification_code.VerificationCodeEntity{
+		Type:   req.Type,
+		Status: verification_code.StatusPending,
+		Code:   req.Code,
+	}
+
+	switch req.Type {
+	case base.SendCodeTypeEmail:
+		if req.Email == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		queryEntity.Target = req.Email
+	case base.SendCodeTypePhone:
+		if req.PhoneCountryCode == "" || req.PhoneNumber == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		queryEntity.Target = req.PhoneNumber
+		queryEntity.CountryCode = req.PhoneCountryCode
+	default:
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
+
+	// 查询验证码
+	result, err := queryEntity.FindInCache()
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if result != "" && result != req.Code {
+		response.Failed(c, error_code.AuthVerificationCodeUnmatched)
+		return
+	}
+
+	foundEntity, err := queryEntity.FindInEntity()
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if foundEntity == nil {
+		response.Failed(c, error_code.AuthVerificationCodeUnmatched)
+		return
+	}
+
+	if time.Now().UnixMilli() > foundEntity.ExpiredAt {
+		response.Failed(c, error_code.AuthVerificationCodeExpired)
+		return
+	}
+
+	// 更新状态
+	foundEntity.Status = verification_code.StatusUsed
+	if err := foundEntity.SaveInEntity(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	// 删除缓存
+	if err := queryEntity.DeleteInCache(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	c.AbortWithStatus(http.StatusOK)
 }
