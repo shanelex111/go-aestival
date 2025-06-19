@@ -15,10 +15,10 @@ func Create(c *CacheToken) error {
 
 	c.Access = &CacheTokenAccess{
 		Token:     util.GetUUID(),
-		ExpiredAt: now + cfg.CacheConfig.AccessExpired.Milliseconds(),
+		ExpiredAt: now + cfg.CacheConfig.AccessValid.Milliseconds(),
 
 		Refresh:          util.GetUUID(),
-		RefreshExpiredAt: now + cfg.CacheConfig.RefreshExpired.Milliseconds(),
+		RefreshExpiredAt: now + cfg.CacheConfig.RefreshValid.Milliseconds(),
 	}
 
 	valueBytes, err := json.Marshal(c)
@@ -30,12 +30,12 @@ func Create(c *CacheToken) error {
 	pipe.Set(redis.Ctx,
 		accessPrefix+c.Access.Token,
 		valueBytes,
-		cfg.CacheConfig.AccessExpired)
+		cfg.CacheConfig.AccessValid)
 
 	pipe.Set(redis.Ctx,
 		refresPrefix+c.Access.Refresh,
 		valueBytes,
-		cfg.CacheConfig.RefreshExpired)
+		cfg.CacheConfig.RefreshValid)
 
 	_, err = pipe.Exec(redis.Ctx)
 	if err != nil {

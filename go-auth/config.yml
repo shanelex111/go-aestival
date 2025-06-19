@@ -41,5 +41,5 @@ verification_code:
 token:
   cache:
     prefix: "auth:token:"
-    access_expire: 15m
-    refresh_expire: 7d
+    access_valid: 15m
+    refresh_valid: 7d

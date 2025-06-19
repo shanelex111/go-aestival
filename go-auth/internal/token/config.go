@@ -21,9 +21,9 @@ type config struct {
 }
 
 type cacheConfig struct {
-	Prefix         string        `mapstructure:"prefix"`
-	AccessExpired  time.Duration `mapstructure:"access_expired"`
-	RefreshExpired time.Duration `mapstructure:"refresh_expired"`
+	Prefix       string        `mapstructure:"prefix"`
+	AccessValid  time.Duration `mapstructure:"access_valid"`
+	RefreshValid time.Duration `mapstructure:"refresh_valid"`
 }
 
 func Load(v *viper.Viper) {
