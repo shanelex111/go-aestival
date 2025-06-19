@@ -1,12 +1,12 @@
 package auth
 
 import (
-	"fmt"
 	"go-auth/internal/base"
 	"go-auth/internal/error_code"
 	"go-auth/internal/metadata/account"
 	"go-auth/internal/metadata/device"
 	"go-auth/internal/metadata/verification_code"
+	"go-auth/internal/token"
 	"net/http"
 	"time"
 
@@ -155,7 +155,22 @@ func Signin(c *gin.Context) {
 	}
 
 	// 5. 生成token
-	fmt.Println(deviceEntity)
+	newToken := &token.CacheToken{
+		Account: &token.CacheTokenAccount{
+			ID: accountEntity.ID,
+		},
+		Device: &token.CacheTokenDevice{
+			ID:         deviceEntity.DeviceID,
+			Type:       deviceEntity.DeviceType,
+			Model:      deviceEntity.DeviceModel,
+			AppVersion: deviceEntity.AppVersion,
+		},
+		Geo: geoCity,
+	}
+	if err = token.Create(newToken); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
 }
 

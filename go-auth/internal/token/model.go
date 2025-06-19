@@ -20,7 +20,7 @@ type CacheTokenAccess struct {
 }
 
 type CacheTokenDevice struct {
-	ID         uint   `json:"id"`
+	ID         string `json:"id"`
 	Type       string `json:"type"`
 	Model      string `json:"model"`
 	AppVersion int    `json:"app_version"`
