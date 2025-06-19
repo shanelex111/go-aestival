@@ -37,3 +37,9 @@ verification_code:
   period: 10m
   cache:
     prefix: "auth:verification_code:"
+
+token:
+  cache:
+    prefix: "auth:token:"
+    access_expire: 15m
+    refresh_expire: 7d

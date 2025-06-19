@@ -7,6 +7,7 @@ import (
 	"go-auth/internal/metadata/aestival_member"
 	"go-auth/internal/metadata/device"
 	"go-auth/internal/metadata/verification_code"
+	"go-auth/internal/token"
 
 	"github.com/shanelex111/go-common/pkg/cache/redis"
 	"github.com/shanelex111/go-common/pkg/config"
@@ -40,6 +41,8 @@ func main() {
 		aestival_member.Load,
 		device.Load,
 		verification_code.Load,
+
+		token.Load,
 	)
 
 	// 4. services run - 业务启动
