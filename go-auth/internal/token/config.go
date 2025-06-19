@@ -11,9 +11,9 @@ const (
 )
 
 var (
-	cfg          *config
-	accessPrefix string
-	refresPrefix string
+	cfg           *config
+	accessPrefix  string
+	refreshPrefix string
 )
 
 type config struct {
@@ -31,10 +31,10 @@ func Load(v *viper.Viper) {
 }
 
 func initConfig(v *viper.Viper) {
-	cfg := &config{}
+	cfg = &config{}
 	if err := v.Sub(defaultKey).Unmarshal(cfg); err != nil {
 		panic(err)
 	}
 	accessPrefix = cfg.CacheConfig.Prefix + "access:"
-	refresPrefix = cfg.CacheConfig.Prefix + "refresh:"
+	refreshPrefix = cfg.CacheConfig.Prefix + "refresh:"
 }

@@ -33,7 +33,7 @@ func Create(c *CacheToken) error {
 		cfg.CacheConfig.AccessValid)
 
 	pipe.Set(redis.Ctx,
-		refresPrefix+c.Access.Refresh,
+		refreshPrefix+c.Access.Refresh,
 		valueBytes,
 		cfg.CacheConfig.RefreshValid)
 
