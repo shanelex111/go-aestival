@@ -14,6 +14,7 @@ var (
 	cfg           *config
 	accessPrefix  string
 	refreshPrefix string
+	accountPrefix string
 )
 
 type config struct {
@@ -37,4 +38,5 @@ func initConfig(v *viper.Viper) {
 	}
 	accessPrefix = cfg.CacheConfig.Prefix + "access:"
 	refreshPrefix = cfg.CacheConfig.Prefix + "refresh:"
+	accountPrefix = cfg.CacheConfig.Prefix + "account:"
 }
