@@ -50,7 +50,7 @@ func Create(c *CacheToken) error {
 		c.Access.Token,
 		deviceBytes,
 	)
-	pipe.Expire(redis.Ctx, accountPrefixKey, cfg.CacheConfig.AccessValid)
+	pipe.Expire(redis.Ctx, accountPrefixKey, cfg.CacheConfig.RefreshValid)
 
 	_, err = pipe.Exec(redis.Ctx)
 	if err != nil {
