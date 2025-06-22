@@ -42,11 +42,16 @@ func Create(c *CacheToken) error {
 		tokenBytes,
 		cfg.CacheConfig.RefreshValid)
 
+	var (
+		accountPrefixKey = accountPrefix + strconv.FormatUint(uint64(c.Account.ID), 10)
+	)
 	pipe.HSet(redis.Ctx,
 		accountPrefix+strconv.FormatUint(uint64(c.Account.ID), 10),
 		c.Access.Token,
 		deviceBytes,
 	)
+	pipe.Expire(redis.Ctx, accountPrefixKey, cfg.CacheConfig.AccessValid)
+
 	_, err = pipe.Exec(redis.Ctx)
 	if err != nil {
 		return err
