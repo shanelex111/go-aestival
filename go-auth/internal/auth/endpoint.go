@@ -298,8 +298,14 @@ func DeleteAccount(c *gin.Context) {
 		return
 	}
 
-	// 删除所有token
-	if err := token.DelAllByAccountID(requestTokenInfo.Account.ID); err != nil {
+	var (
+		accountID = requestTokenInfo.Account.ID
+	)
+
+	// 1. 删除账户
+	account.DelAllByAccountID(accountID)
+	// 2. 删除所有token
+	if err := token.DelAllByAccountID(accountID); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return
 	}

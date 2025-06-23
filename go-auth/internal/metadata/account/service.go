@@ -3,6 +3,7 @@ package account
 import (
 	"errors"
 	"go-auth/internal/base"
+	"time"
 
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -111,4 +112,26 @@ func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*AccountEntity, 
 	}
 	return &entity, nil
 
+}
+
+func DelAllByAccountID(accountID uint) error {
+	if err := mysql.DB.Model(&AccountEntity{}).
+		Where(&AccountEntity{
+			BaseModelEntity: base.BaseModelEntity{
+				ID: accountID,
+			},
+		}).
+		Where("deleted_at = 0 and status != ?", StatusDeleted).
+		Updates(&AccountEntity{
+			Status: StatusDeleted,
+			BaseModelEntity: base.BaseModelEntity{
+				DeletedAt: time.Now().UnixMilli(),
+			},
+		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return err
+	}
+	return nil
 }
