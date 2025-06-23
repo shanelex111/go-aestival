@@ -173,6 +173,11 @@ func Signin(c *gin.Context) {
 		return
 	}
 
+	//返回token
+	c.AbortWithStatusJSON(http.StatusOK, signinResponse{
+		Access: newToken.Access,
+	})
+
 }
 
 func Signout(c *gin.Context) {

@@ -1,5 +1,7 @@
 package auth
 
+import "go-auth/internal/token"
+
 type signinRequest struct {
 	SigninType string `json:"signin_type" binding:"required"`
 	CheckType  string `json:"check_type" binding:"required"`
@@ -13,6 +15,9 @@ type signinRequest struct {
 	Password         string `json:"password"`
 
 	Device *deviceRequest `json:"device" binding:"required"`
+}
+type signinResponse struct {
+	Access *token.CacheTokenAccess `json:"access"`
 }
 type deviceRequest struct {
 	ID         string `json:"id" binding:"required"`
