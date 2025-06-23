@@ -25,6 +25,7 @@ type cacheConfig struct {
 	Prefix       string        `mapstructure:"prefix"`
 	AccessValid  time.Duration `mapstructure:"access_valid"`
 	RefreshValid time.Duration `mapstructure:"refresh_valid"`
+	Limit        int           `mapstructure:"limit"`
 }
 
 func Load(v *viper.Viper) {

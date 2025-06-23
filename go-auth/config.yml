@@ -43,3 +43,4 @@ token:
     prefix: "auth:token:"
     access_valid: "15m"
     refresh_valid: "168h"
+    limit: 5 
