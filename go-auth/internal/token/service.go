@@ -3,6 +3,7 @@ package token
 import (
 	"encoding/json"
 	"errors"
+	"sort"
 	"strconv"
 	"time"
 
@@ -35,23 +36,24 @@ func (c *CacheToken) Create() error {
 	)
 
 	// 查询所有
-	existTokens, err := c.FindAll()
+	existTokens, err := c.findAll()
 	if err != nil {
 		return err
 	}
 	if len(existTokens) > 0 {
 		// 先删除device相同的token
-		for k, v := range existTokens {
+		for _, v := range existTokens {
 			if v.Device.DeviceID == c.Device.DeviceID &&
 				v.Device.DeviceModel == c.Device.DeviceModel &&
 				v.Device.DeviceType == c.Device.DeviceType &&
 				v.Device.AppVersion == c.Device.AppVersion {
 				pipe.Del(redis.Ctx, accessPrefix+v.Access.Token)
-				pipe.Del(redis.Ctx, refreshPrefix+k)
-				pipe.HDel(redis.Ctx, accountPrefixKey, k)
+				pipe.Del(redis.Ctx, refreshPrefix+v.Access.Refresh)
+				pipe.HDel(redis.Ctx, accountPrefixKey, v.Access.Refresh)
 			}
 		}
 	}
+
 	// 新生成的token
 	pipe.Set(redis.Ctx,
 		accessPrefix+c.Access.Token,
@@ -74,15 +76,38 @@ func (c *CacheToken) Create() error {
 	if err != nil {
 		return err
 	}
+
+	// 限制token数量
+	if err := c.limit(); err != nil {
+		return err
+	}
 	return nil
 }
 
-func (c *CacheToken) Limit() error {
+func (c *CacheToken) limit() error {
+	existTokens, err := c.findAll()
+	if err != nil {
+		return err
+	}
+	if len(existTokens) <= cfg.CacheConfig.Limit {
+		return nil
+	}
 
+	var (
+		pipe             = redis.RDB.Pipeline()
+		accountPrefixKey = c.getAccountPrefixKey()
+	)
+	pipe.Del(redis.Ctx, accessPrefix+existTokens[0].Access.Token)
+	pipe.Del(redis.Ctx, refreshPrefix+existTokens[0].Access.Refresh)
+	pipe.HDel(redis.Ctx, accountPrefixKey, existTokens[0].Access.Refresh)
+	_, err = pipe.Exec(redis.Ctx)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func (c *CacheToken) FindAll() (map[string]*CacheToken, error) {
+func (c *CacheToken) findAll() ([]*CacheToken, error) {
 	var (
 		accountPrefixKey = c.getAccountPrefixKey()
 	)
@@ -94,16 +119,18 @@ func (c *CacheToken) FindAll() (map[string]*CacheToken, error) {
 		return nil, err
 	}
 
-	tokens := make(map[string]*CacheToken)
-	for k, v := range result {
+	var tokens []*CacheToken
+	for _, v := range result {
 		var token CacheToken
 		if err := json.Unmarshal([]byte(v), &token); err != nil {
 			continue
 		}
-
-		tokens[k] = &token
+		tokens = append(tokens, &token)
 	}
 
+	sort.Slice(tokens, func(i, j int) bool {
+		return tokens[i].Device.CreatedAt < tokens[j].Device.CreatedAt
+	})
 	return tokens, nil
 }
 
