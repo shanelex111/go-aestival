@@ -91,6 +91,8 @@ github.com/shanelex111/go-common v0.0.0-20250618092040-81a0ebd1b562 h1:0XQoKeP8P
 github.com/shanelex111/go-common v0.0.0-20250618092040-81a0ebd1b562/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/shanelex111/go-common v0.0.0-20250619012737-4062ced14721 h1:TFgJj3tkwBC9ZpZS+5NdxEiymxFErSeUt7gCUnx+E+w=
 github.com/shanelex111/go-common v0.0.0-20250619012737-4062ced14721/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
+github.com/shanelex111/go-common v0.0.0-20250623092734-d2e30c0d59b2 h1:NQZnUZQKLnLJOCRKZYG/8i6CVG/sNQZqPFenA8gbv/k=
+github.com/shanelex111/go-common v0.0.0-20250623092734-d2e30c0d59b2/go.mod h1:+ooSleBBeNfysfyLVrGVVEzlhpesgmIruSL3e+xfQOg=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=

@@ -181,6 +181,25 @@ func Signin(c *gin.Context) {
 }
 
 func Signout(c *gin.Context) {
+	accessToken, exists := c.Get("access_token")
+	if !exists {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+
+	existToken, err := token.Find(accessToken.(string))
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if existToken != nil {
+		if err := existToken.Delete(); err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+	}
+
+	c.AbortWithStatus(http.StatusOK)
 
 }
 

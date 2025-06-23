@@ -19,7 +19,7 @@ func Run() {
 	{
 		authGroup.POST("/signin", auth.Signin)
 		authGroup.POST("/refresh-token", auth.RefreshToken)
-		authGroup.DELETE("/signout", auth.Signout)
+		authGroup.DELETE("/signout", request.TokenAuth(), auth.Signout)
 		authGroup.DELETE("/account", auth.DeleteAccount)
 
 		authGroup.PUT("/password", auth.ResetPassword)

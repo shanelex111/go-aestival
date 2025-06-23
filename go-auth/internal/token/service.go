@@ -168,3 +168,18 @@ func (c *CacheToken) Delete() error {
 	}
 	return nil
 }
+
+func Find(token string) (*CacheToken, error) {
+	val, err := redis.RDB.Get(redis.Ctx, accessPrefix+token).Result()
+	if err != nil {
+		if errors.Is(err, goredis.Nil) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	var c CacheToken
+	if err := json.Unmarshal([]byte(val), &c); err != nil {
+		return nil, err
+	}
+	return &c, nil
+}
