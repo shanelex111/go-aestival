@@ -4,7 +4,7 @@ engine:
   mode: dev
 
 mysql:
-  dsn: root:root123456@tcp(127.0.0.1:3306)/go-auth?charset=utf8mb4&parseTime=True&loc=Local
+  dsn: root:root123456@tcp(127.0.0.1:3306)/aestival-auth?charset=utf8mb4&parseTime=True&loc=Local
 
 redis:
   addrs:
@@ -43,4 +43,4 @@ token:
     prefix: "auth:token:"
     access_valid: "15m"
     refresh_valid: "168h"
-    limit: 5 
+    limit: 5
