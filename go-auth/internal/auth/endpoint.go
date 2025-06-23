@@ -303,7 +303,11 @@ func DeleteAccount(c *gin.Context) {
 	)
 
 	// 1. 删除账户
-	account.DelAllByAccountID(accountID)
+	if err := account.DelAllByAccountID(accountID); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
 	// 2. 删除所有token
 	if err := token.DelAllByAccountID(accountID); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
