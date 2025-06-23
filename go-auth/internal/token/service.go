@@ -137,3 +137,34 @@ func (c *CacheToken) findAll() ([]*CacheToken, error) {
 func (c *CacheToken) getAccountPrefixKey() string {
 	return accountPrefix + strconv.FormatUint(uint64(c.Account.ID), 10)
 }
+
+func GetRefresh(refresh string) (*CacheToken, error) {
+	val, err := redis.RDB.Get(redis.Ctx, refreshPrefix+refresh).Result()
+	if err != nil {
+		if errors.Is(err, goredis.Nil) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	var token CacheToken
+	if err := json.Unmarshal([]byte(val), &token); err != nil {
+		return nil, err
+	}
+	return &token, nil
+}
+
+func (c *CacheToken) Delete() error {
+	var (
+		pipe             = redis.RDB.Pipeline()
+		accountPrefixKey = c.getAccountPrefixKey()
+	)
+
+	pipe.Del(redis.Ctx, accessPrefix+c.Access.Token)
+	pipe.Del(redis.Ctx, refreshPrefix+c.Access.Refresh)
+	pipe.HDel(redis.Ctx, accountPrefixKey, c.Access.Refresh)
+	_, err := pipe.Exec(redis.Ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}

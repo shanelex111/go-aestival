@@ -19,6 +19,13 @@ type signinRequest struct {
 type signinResponse struct {
 	Access *token.CacheTokenAccess `json:"access"`
 }
+type refreshTokenRequest struct {
+	Device  *deviceRequest `json:"device" binding:"required"`
+	Refresh string         `json:"refresh" binding:"required"`
+}
+type refreshTokenResponse struct {
+	Access *token.CacheTokenAccess `json:"access"`
+}
 type deviceRequest struct {
 	ID         string `json:"id" binding:"required"`
 	Type       string `json:"type" binding:"required"`

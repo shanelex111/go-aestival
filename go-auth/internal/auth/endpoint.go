@@ -185,7 +185,77 @@ func Signout(c *gin.Context) {
 }
 
 func RefreshToken(c *gin.Context) {
+	var req refreshTokenRequest
+	if err := c.ShouldBind(&req); err != nil {
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
+	existRefresh, err := token.GetRefresh(req.Refresh)
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if existRefresh == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+	// 3. 查询ip信息
+	geoCity, err := geo.GetCity(util.GetIP(c))
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 
+	// 4. 记录设备信息
+	deviceEntity := device.DeviceEntity{
+		AccountID:   existRefresh.Account.ID,
+		DeviceID:    req.Device.ID,
+		DeviceType:  req.Device.Type,
+		DeviceModel: req.Device.Model,
+		AppVersion:  req.Device.AppVersion,
+	}
+
+	if geoCity != nil {
+		deviceEntity.UpdatedIP = geoCity.IP
+		deviceEntity.UpdatedIPContinentCode = geoCity.ContinentCode
+		deviceEntity.UpdatedIPCountryCode = geoCity.CountryCode
+		deviceEntity.UpdatedIPSubdivisionCode = geoCity.SubvisionCode
+		deviceEntity.UpdatedIPCityName = geoCity.CityName
+	}
+	if err := deviceEntity.SaveInEntity(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	// 5. 生成token
+	newToken := &token.CacheToken{
+		Account: &token.CacheTokenAccount{
+			ID: existRefresh.Account.ID,
+		},
+		Device: &token.CacheTokenDevice{
+			DeviceID:    deviceEntity.DeviceID,
+			DeviceType:  deviceEntity.DeviceType,
+			DeviceModel: deviceEntity.DeviceModel,
+			AppVersion:  deviceEntity.AppVersion,
+			CreatedAt:   time.Now().UnixMilli(),
+		},
+		Geo: geoCity,
+	}
+	if err = newToken.Create(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	// 6. 删除旧token
+	if err := existRefresh.Delete(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	//返回token
+	c.AbortWithStatusJSON(http.StatusOK, refreshTokenResponse{
+		Access: newToken.Access,
+	})
 }
 func ResetPassword(c *gin.Context) {
 

@@ -41,6 +41,6 @@ verification_code:
 token:
   cache:
     prefix: "auth:token:"
-    access_valid: "15m"
+    access_valid: "30m"
     refresh_valid: "168h"
     limit: 5

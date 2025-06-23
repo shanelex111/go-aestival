@@ -18,7 +18,7 @@ func Run() {
 	authGroup := r.Group("/auth/v1")
 	{
 		authGroup.POST("/signin", auth.Signin)
-		authGroup.PUT("/refresh-token", auth.RefreshToken)
+		authGroup.POST("/refresh-token", auth.RefreshToken)
 		authGroup.DELETE("/signout", auth.Signout)
 		authGroup.DELETE("/account", auth.DeleteAccount)
 
