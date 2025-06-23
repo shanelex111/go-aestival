@@ -5,7 +5,7 @@ go 1.24.2
 require (
 	github.com/gin-gonic/gin v1.10.1
 	github.com/redis/go-redis/v9 v9.10.0
-	github.com/shanelex111/go-common v0.0.0-20250623100158-df7a7769f69b
+	github.com/shanelex111/go-common v0.0.0-20250623132359-b6d57db9232e
 	github.com/spf13/viper v1.20.1
 )
 

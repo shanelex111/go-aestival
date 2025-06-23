@@ -31,7 +31,7 @@ func (c *CacheToken) Create() error {
 	}
 
 	var (
-		accountPrefixKey = c.getAccountPrefixKey()
+		accountPrefixKey = getAccountPrefixKey(c.Account.ID)
 		pipe             = redis.RDB.Pipeline()
 	)
 
@@ -95,7 +95,7 @@ func (c *CacheToken) limit() error {
 
 	var (
 		pipe             = redis.RDB.Pipeline()
-		accountPrefixKey = c.getAccountPrefixKey()
+		accountPrefixKey = getAccountPrefixKey(c.Account.ID)
 	)
 	pipe.Del(redis.Ctx, accessPrefix+existTokens[0].Access.Token)
 	pipe.Del(redis.Ctx, refreshPrefix+existTokens[0].Access.Refresh)
@@ -109,7 +109,7 @@ func (c *CacheToken) limit() error {
 
 func (c *CacheToken) findAll() ([]*CacheToken, error) {
 	var (
-		accountPrefixKey = c.getAccountPrefixKey()
+		accountPrefixKey = getAccountPrefixKey(c.Account.ID)
 	)
 	result, err := redis.RDB.HGetAll(redis.Ctx, accountPrefixKey).Result()
 	if err != nil {
@@ -134,8 +134,8 @@ func (c *CacheToken) findAll() ([]*CacheToken, error) {
 	return tokens, nil
 }
 
-func (c *CacheToken) getAccountPrefixKey() string {
-	return accountPrefix + strconv.FormatUint(uint64(c.Account.ID), 10)
+func getAccountPrefixKey(accountID uint) string {
+	return accountPrefix + strconv.FormatUint(uint64(accountID), 10)
 }
 
 func GetRefresh(refresh string) (*CacheToken, error) {
@@ -156,7 +156,7 @@ func GetRefresh(refresh string) (*CacheToken, error) {
 func (c *CacheToken) Delete() error {
 	var (
 		pipe             = redis.RDB.Pipeline()
-		accountPrefixKey = c.getAccountPrefixKey()
+		accountPrefixKey = getAccountPrefixKey(c.Account.ID)
 	)
 
 	pipe.Del(redis.Ctx, accessPrefix+c.Access.Token)
@@ -182,4 +182,34 @@ func Find(token string) (*CacheToken, error) {
 		return nil, err
 	}
 	return &c, nil
+}
+func DelAllByAccountID(accountID uint) error {
+	var (
+		accountPrefixKey = getAccountPrefixKey(accountID)
+	)
+
+	// 获取所有token
+	result, err := redis.RDB.HGetAll(redis.Ctx, accountPrefixKey).Result()
+	if err != nil {
+		if errors.Is(err, goredis.Nil) {
+			return nil
+		}
+		return err
+	}
+	if len(result) > 0 {
+		var pipe = redis.RDB.Pipeline()
+		for _, v := range result {
+			var token CacheToken
+			if err := json.Unmarshal([]byte(v), &token); err != nil {
+				continue
+			}
+			pipe.Del(redis.Ctx, accessPrefix+token.Access.Token)
+			pipe.Del(redis.Ctx, refreshPrefix+token.Access.Refresh)
+		}
+		pipe.HDel(redis.Ctx, accountPrefixKey)
+		if _, err := pipe.Exec(redis.Ctx); err != nil {
+			return err
+		}
+	}
+	return nil
 }
