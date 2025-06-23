@@ -160,14 +160,15 @@ func Signin(c *gin.Context) {
 			ID: accountEntity.ID,
 		},
 		Device: &token.CacheTokenDevice{
-			ID:         deviceEntity.DeviceID,
-			Type:       deviceEntity.DeviceType,
-			Model:      deviceEntity.DeviceModel,
-			AppVersion: deviceEntity.AppVersion,
+			DeviceID:    deviceEntity.DeviceID,
+			DeviceType:  deviceEntity.DeviceType,
+			DeviceModel: deviceEntity.DeviceModel,
+			AppVersion:  deviceEntity.AppVersion,
+			CreatedAt:   time.Now().UnixMilli(),
 		},
 		Geo: geoCity,
 	}
-	if err = token.Create(newToken); err != nil {
+	if err = newToken.Create(); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return
 	}
