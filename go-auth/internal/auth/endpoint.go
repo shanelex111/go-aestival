@@ -327,6 +327,20 @@ func DeleteAccount(c *gin.Context) {
 		return
 	}
 
+	// 4. 删除所有verify codes
+	if existToken.Account.Email != "" {
+		if err := verification_code.DelAllByEmail(existToken.Account.Email); err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+	}
+	if existToken.Account.PhoneCountryCode != "" && existToken.Account.PhoneNumber != "" {
+		if err := verification_code.DelAllByPhone(existToken.Account.PhoneCountryCode, existToken.Account.PhoneNumber); err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+	}
+
 	c.AbortWithStatus(http.StatusOK)
 
 }
