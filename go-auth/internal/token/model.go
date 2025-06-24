@@ -10,7 +10,10 @@ type CacheToken struct {
 }
 
 type CacheTokenAccount struct {
-	ID uint `json:"id"`
+	ID               uint   `json:"id"`
+	Email            string `json:"email"`
+	PhoneCountryCode string `json:"phone_country_code"`
+	PhoneNumber      string `json:"phone_number"`
 }
 type CacheTokenAccess struct {
 	Token            string `json:"token"`

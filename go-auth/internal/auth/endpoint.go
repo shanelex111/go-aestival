@@ -157,8 +157,12 @@ func Signin(c *gin.Context) {
 	// 5. 生成token
 	newToken := &token.CacheToken{
 		Account: &token.CacheTokenAccount{
-			ID: accountEntity.ID,
+			ID:               accountEntity.ID,
+			Email:            accountEntity.Email,
+			PhoneCountryCode: accountEntity.PhoneCountryCode,
+			PhoneNumber:      accountEntity.PhoneNumber,
 		},
+
 		Device: &token.CacheTokenDevice{
 			DeviceID:    deviceEntity.DeviceID,
 			DeviceType:  deviceEntity.DeviceType,
