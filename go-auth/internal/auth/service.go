@@ -7,7 +7,7 @@ import (
 )
 
 func verifyEmailCode(email, code, scene string) (bool, error) {
-	queryEntity := &verification_code.VerificationCodeEntity{
+	queryEntity := &verification_code.Entity{
 		Scene:  scene,
 		Type:   base.SendCodeTypeEmail,
 		Code:   code,
@@ -28,7 +28,7 @@ func verifyEmailCode(email, code, scene string) (bool, error) {
 }
 
 func verifyPhoneCode(phoneCountryCode, phoneNumber, code, scene string) (bool, error) {
-	queryEntity := &verification_code.VerificationCodeEntity{
+	queryEntity := &verification_code.Entity{
 		Scene:       scene,
 		Type:        base.SendCodeTypeEmail,
 		Code:        code,

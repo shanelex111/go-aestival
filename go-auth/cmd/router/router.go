@@ -15,23 +15,28 @@ func Run() {
 	r.Use(request.SetUUID())
 	r.Use(request.SetLogger())
 
-	authGroup := r.Group("/auth/v1")
+	authNoTokenGroup := r.Group("/auth/v1")
 	{
-		authGroup.POST("/signin", auth.Signin)
-		authGroup.POST("/refresh-token", auth.RefreshToken)
-		authGroup.DELETE("/signout", request.AuthAccessToken(), auth.Signout)
-		authGroup.DELETE("/account", request.AuthAccessToken(), auth.DeleteAccount)
-
-		authGroup.PUT("/password", request.AuthTokenInfo(), auth.ResetPassword)
-		authGroup.PUT("/avatar", auth.UpdateAvatar)
-		authGroup.PUT("/nickname", auth.UpdateNickname)
-
-		authGroup.POST("/send-code", auth.SendCode)
-		authGroup.POST("/verify-code", auth.VerifyCode)
+		authNoTokenGroup.POST("/signin", auth.Signin)
+		authNoTokenGroup.POST("/refresh-token", auth.RefreshToken)
+		authNoTokenGroup.POST("/send-code", auth.SendCode)
+		authNoTokenGroup.POST("/verify-code", auth.VerifyCode)
 
 	}
 
-	r.Run(":" + engine.GetPort())
+	authTokenGroup := r.Group("/auth/v1")
+	authTokenGroup.Use(request.AuthTokenInfo())
+	{
+		authTokenGroup.DELETE("/signout", auth.Signout)
+		authTokenGroup.DELETE("/account", auth.DeleteAccount)
+		authTokenGroup.PUT("/password", auth.ResetPassword)
+		authTokenGroup.PUT("/avatar", auth.UpdateAvatar)
+		authTokenGroup.PUT("/nickname", auth.UpdateNickname)
+	}
+
+	if err := r.Run(":" + engine.GetPort()); err != nil {
+		panic(err)
+	}
 }
 
 func getGinMode() string {

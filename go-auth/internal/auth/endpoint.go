@@ -27,7 +27,13 @@ func Signin(c *gin.Context) {
 	}
 
 	// 1. 手机号&验证码登录 | 邮箱&验证码登录| 手机号&密码登录 | 邮箱&密码登录
-	var accountEntity *account.AccountEntity
+	var accountEntity = &account.Entity{
+		PhoneCountryCode: req.PhoneCountryCode,
+		PhoneNumber:      req.PhoneNumber,
+		Email:            req.Email,
+		Password:         req.Password,
+		Status:           account.StatusEnable,
+	}
 
 	// 1.1 手机号&验证码校验
 	if req.SigninType == base.SigninTypePhone && req.CheckType == base.CheckTypeVerificationCode {
@@ -44,7 +50,7 @@ func Signin(c *gin.Context) {
 			response.Failed(c, error_code.AuthVerificationCodeUnmatched)
 			return
 		}
-		accountEntity = &account.AccountEntity{
+		accountEntity = &account.Entity{
 			PhoneCountryCode: req.PhoneCountryCode,
 			PhoneNumber:      req.PhoneNumber,
 			Status:           account.StatusEnable,
@@ -67,7 +73,7 @@ func Signin(c *gin.Context) {
 			return
 		}
 
-		accountEntity = &account.AccountEntity{
+		accountEntity = &account.Entity{
 			Email:  req.Email,
 			Status: account.StatusEnable,
 		}
@@ -134,7 +140,7 @@ func Signin(c *gin.Context) {
 	}
 
 	// 4. 记录设备信息
-	deviceEntity := device.DeviceEntity{
+	deviceEntity := device.Entity{
 		AccountID:   accountEntity.ID,
 		DeviceID:    req.Device.ID,
 		DeviceType:  req.Device.Type,
@@ -186,24 +192,28 @@ func Signin(c *gin.Context) {
 }
 
 func Signout(c *gin.Context) {
-	accessToken, exists := c.Get("access_token")
+	tokenInfo, exists := c.Get(request.TokenInfoKey)
 	if !exists {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
 	}
 
-	existToken, err := token.Find(accessToken.(string))
-	if err != nil {
+	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+
+	cacheToken := &token.CacheToken{
+		Account: &token.CacheTokenAccount{
+			ID: requestTokenInfo.Account.ID,
+		},
+		Access: &token.CacheTokenAccess{
+			Token:   requestTokenInfo.Access.Token,
+			Refresh: requestTokenInfo.Access.Refresh,
+		},
+	}
+
+	if err := cacheToken.Delete(); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return
 	}
-	if existToken != nil {
-		if err := existToken.Delete(); err != nil {
-			response.Failed(c, error_code.AuthInternalServerError)
-			return
-		}
-	}
-
 	c.AbortWithStatus(http.StatusOK)
 
 }
@@ -231,7 +241,7 @@ func RefreshToken(c *gin.Context) {
 	}
 
 	// 4. 记录设备信息
-	deviceEntity := device.DeviceEntity{
+	deviceEntity := device.Entity{
 		AccountID:   existRefresh.Account.ID,
 		DeviceID:    req.Device.ID,
 		DeviceType:  req.Device.Type,
@@ -295,7 +305,7 @@ func ResetPassword(c *gin.Context) {
 
 	// 1. 手机号&验证码登录 | 邮箱&验证码登录
 	var (
-		foundEntity      *account.AccountEntity
+		foundEntity      *account.Entity
 		requestTokenInfo = tokenInfo.(*request.TokenInfo)
 	)
 
@@ -394,23 +404,15 @@ func UpdateNickname(c *gin.Context) {
 
 }
 func DeleteAccount(c *gin.Context) {
-	accessToken, exists := c.Get("access_token")
+	tokenInfo, exists := c.Get(request.TokenInfoKey)
 	if !exists {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
 	}
-	existToken, err := token.Find(accessToken.(string))
-	if err != nil {
-		response.Failed(c, error_code.AuthInternalServerError)
-		return
-	}
-	if existToken == nil {
-		response.Failed(c, error_code.AuthUnauthorized)
-		return
-	}
+	requestTokenInfo := tokenInfo.(*request.TokenInfo)
 
 	var (
-		accountID = existToken.Account.ID
+		accountID = requestTokenInfo.Account.ID
 	)
 
 	// 1. 删除账户
@@ -432,14 +434,14 @@ func DeleteAccount(c *gin.Context) {
 	}
 
 	// 4. 删除所有verify codes
-	if existToken.Account.Email != "" {
-		if err := verification_code.DelAllByEmail(existToken.Account.Email); err != nil {
+	if requestTokenInfo.Account.Email != "" {
+		if err := verification_code.DelAllByEmail(requestTokenInfo.Account.Email); err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
 		}
 	}
-	if existToken.Account.PhoneCountryCode != "" && existToken.Account.PhoneNumber != "" {
-		if err := verification_code.DelAllByPhone(existToken.Account.PhoneCountryCode, existToken.Account.PhoneNumber); err != nil {
+	if requestTokenInfo.Account.PhoneCountryCode != "" && requestTokenInfo.Account.PhoneNumber != "" {
+		if err := verification_code.DelAllByPhone(requestTokenInfo.Account.PhoneCountryCode, requestTokenInfo.Account.PhoneNumber); err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
 		}
@@ -455,7 +457,7 @@ func SendCode(c *gin.Context) {
 		return
 	}
 
-	queryEntity := &verification_code.VerificationCodeEntity{
+	queryEntity := &verification_code.Entity{
 		Scene:  req.Scene,
 		Type:   req.Type,
 		Status: verification_code.StatusPending,
@@ -552,7 +554,7 @@ func VerifyCode(c *gin.Context) {
 		return
 	}
 
-	queryEntity := &verification_code.VerificationCodeEntity{
+	queryEntity := &verification_code.Entity{
 		Scene:  req.Scene,
 		Type:   req.Type,
 		Status: verification_code.StatusPending,

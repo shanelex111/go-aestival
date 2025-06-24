@@ -2,7 +2,7 @@ package device
 
 import "go-auth/internal/base"
 
-type DeviceEntity struct {
+type Entity struct {
 	base.BaseModelEntity
 	AccountID   uint   `gorm:"column:account_id;type:int unsigned not null;comment:账户id"`
 	DeviceID    string `gorm:"column:device_id;type:varchar(255) not null;comment:设备id"`
@@ -24,6 +24,6 @@ type DeviceEntity struct {
 	UpdatedIPCityName        string `gorm:"column:updated_ip_city_name;type:varchar(255) not null;comment:最近使用该设备登录时IP城市名称"`
 }
 
-func (DeviceEntity) TableName() string {
+func (*Entity) TableName() string {
 	return cfg.ConfigEntity.TableName
 }

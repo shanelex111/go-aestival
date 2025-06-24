@@ -10,15 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
+func (e *Entity) SaveInEntity(signinType, checkType string) error {
 	var (
-		entity    *AccountEntity
-		condition *AccountEntity
+		entity    *Entity
+		condition *Entity
 	)
 
 	// 手机 & 验证码
 	if signinType == base.SigninTypePhone && checkType == base.CheckTypeVerificationCode {
-		condition = &AccountEntity{
+		condition = &Entity{
 			PhoneCountryCode: e.PhoneCountryCode,
 			PhoneNumber:      e.PhoneNumber,
 			Status:           StatusEnable,
@@ -27,7 +27,7 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 
 	// 手机 & 密码
 	if signinType == base.SigninTypePhone && checkType == base.CheckTypePassword {
-		condition = &AccountEntity{
+		condition = &Entity{
 			PhoneCountryCode: e.PhoneCountryCode,
 			PhoneNumber:      e.PhoneNumber,
 			Password:         e.Password,
@@ -37,7 +37,7 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 
 	// 邮箱 & 验证码
 	if signinType == base.SigninTypeEmail && checkType == base.CheckTypeVerificationCode {
-		condition = &AccountEntity{
+		condition = &Entity{
 			Email:  e.Email,
 			Status: StatusEnable,
 		}
@@ -45,7 +45,7 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 
 	// 邮箱 & 密码
 	if signinType == base.SigninTypeEmail && checkType == base.CheckTypePassword {
-		condition = &AccountEntity{
+		condition = &Entity{
 			Email:    e.Email,
 			Password: e.Password,
 			Status:   StatusEnable,
@@ -65,10 +65,10 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 	return mysql.DB.Save(entity).Error
 }
 
-func (e *AccountEntity) Update() error {
+func (e *Entity) Update() error {
 	return mysql.DB.Save(e).Error
 }
-func (e *AccountEntity) SetPassword(pw string) error {
+func (e *Entity) SetPassword(pw string) error {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
 	if err != nil {
 		return err
@@ -77,14 +77,14 @@ func (e *AccountEntity) SetPassword(pw string) error {
 	return nil
 }
 
-func (e *AccountEntity) CheckPassword(pw string) bool {
+func (e *Entity) CheckPassword(pw string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(e.Password), []byte(pw)) == nil
 }
 
-func FindByEmailInEntity(email string) (*AccountEntity, error) {
-	var entity AccountEntity
+func FindByEmailInEntity(email string) (*Entity, error) {
+	var entity Entity
 	if err := mysql.DB.
-		Where(&AccountEntity{
+		Where(&Entity{
 			Email:  email,
 			Status: StatusEnable,
 		}).
@@ -98,10 +98,10 @@ func FindByEmailInEntity(email string) (*AccountEntity, error) {
 	return &entity, nil
 }
 
-func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*AccountEntity, error) {
-	var entity AccountEntity
+func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*Entity, error) {
+	var entity Entity
 	if err := mysql.DB.
-		Where(&AccountEntity{
+		Where(&Entity{
 			PhoneCountryCode: phoneCountryCode,
 			PhoneNumber:      phoneNumber,
 			Status:           StatusEnable,
@@ -116,10 +116,10 @@ func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*AccountEntity, 
 	return &entity, nil
 
 }
-func FindByAccountID(accountID uint) (*AccountEntity, error) {
-	var entity AccountEntity
+func FindByAccountID(accountID uint) (*Entity, error) {
+	var entity Entity
 	if err := mysql.DB.
-		Where(&AccountEntity{
+		Where(&Entity{
 			BaseModelEntity: base.BaseModelEntity{
 				ID: accountID,
 			},
@@ -137,14 +137,14 @@ func FindByAccountID(accountID uint) (*AccountEntity, error) {
 }
 
 func DelAllByAccountID(accountID uint) error {
-	if err := mysql.DB.Model(&AccountEntity{}).
-		Where(&AccountEntity{
+	if err := mysql.DB.Model(&Entity{}).
+		Where(&Entity{
 			BaseModelEntity: base.BaseModelEntity{
 				ID: accountID,
 			},
 		}).
 		Where("deleted_at = 0 and status != ?", StatusDeleted).
-		Updates(&AccountEntity{
+		Updates(&Entity{
 			Status: StatusDeleted,
 			BaseModelEntity: base.BaseModelEntity{
 				DeletedAt: time.Now().UnixMilli(),

@@ -12,10 +12,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func (e *VerificationCodeEntity) FindInEntity() (*VerificationCodeEntity, error) {
+func (e *Entity) FindInEntity() (*Entity, error) {
 	var (
-		entity    VerificationCodeEntity
-		condition = &VerificationCodeEntity{
+		entity    Entity
+		condition = &Entity{
 			Scene:  e.Scene,
 			Type:   e.Type,
 			Status: e.Status,
@@ -36,10 +36,10 @@ func (e *VerificationCodeEntity) FindInEntity() (*VerificationCodeEntity, error)
 	return &entity, nil
 }
 
-func (e *VerificationCodeEntity) FindLastInEntity() (*VerificationCodeEntity, error) {
+func (e *Entity) FindLastInEntity() (*Entity, error) {
 	var (
-		entity    VerificationCodeEntity
-		condition = &VerificationCodeEntity{
+		entity    Entity
+		condition = &Entity{
 			Scene:  e.Scene,
 			Type:   e.Type,
 			Target: e.Target,
@@ -59,9 +59,9 @@ func (e *VerificationCodeEntity) FindLastInEntity() (*VerificationCodeEntity, er
 	return &entity, nil
 }
 
-func (e *VerificationCodeEntity) CountTodayInEntity() (int64, error) {
+func (e *Entity) CountTodayInEntity() (int64, error) {
 	var (
-		condition = &VerificationCodeEntity{
+		condition = &Entity{
 			Type:   e.Type,
 			Target: e.Target,
 		}
@@ -73,7 +73,7 @@ func (e *VerificationCodeEntity) CountTodayInEntity() (int64, error) {
 		condition.CountryCode = e.CountryCode
 	}
 
-	if err := mysql.DB.Model(&VerificationCodeEntity{}).
+	if err := mysql.DB.Model(&Entity{}).
 		Where(condition).
 		Where("deleted_at = 0").
 		Where("created_at >= ? AND created_at <= ?", todayStart, todayEnd).
@@ -83,9 +83,9 @@ func (e *VerificationCodeEntity) CountTodayInEntity() (int64, error) {
 	return count, nil
 }
 
-func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
+func (e *Entity) ExpiredAllInEntity() error {
 	var (
-		condition = &VerificationCodeEntity{
+		condition = &Entity{
 			Scene:  e.Scene,
 			Type:   e.Type,
 			Target: e.Target,
@@ -96,21 +96,21 @@ func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
 		condition.CountryCode = e.CountryCode
 	}
 
-	return mysql.DB.Model(&VerificationCodeEntity{}).Where(condition).Where("deleted_at = 0").Update("status", StatusExpired).Error
+	return mysql.DB.Model(&Entity{}).Where(condition).Where("deleted_at = 0").Update("status", StatusExpired).Error
 }
 
-func (e *VerificationCodeEntity) SaveInEntity() error {
+func (e *Entity) SaveInEntity() error {
 	return mysql.DB.Save(e).Error
 }
 
-func (e *VerificationCodeEntity) SaveInCache() error {
+func (e *Entity) SaveInCache() error {
 	return redis.RDB.Set(redis.Ctx, e.getRedisKey(), e.Code, cfg.Period).Err()
 }
 
-func (e *VerificationCodeEntity) DeleteInCache() error {
+func (e *Entity) DeleteInCache() error {
 	return redis.RDB.Del(redis.Ctx, e.getRedisKey()).Err()
 }
-func (e *VerificationCodeEntity) FindInCache() (string, error) {
+func (e *Entity) FindInCache() (string, error) {
 	result, err := redis.RDB.Get(redis.Ctx, e.getRedisKey()).Result()
 	if err != nil {
 		if !errors.Is(err, goredis.Nil) {
@@ -120,7 +120,7 @@ func (e *VerificationCodeEntity) FindInCache() (string, error) {
 	return result, nil
 }
 
-func (e *VerificationCodeEntity) getRedisKey() string {
+func (e *Entity) getRedisKey() string {
 	var (
 		redisKey = cfg.Cache.Prefix + e.Scene + ":" + e.Type + ":"
 	)
@@ -134,7 +134,7 @@ func (e *VerificationCodeEntity) getRedisKey() string {
 
 func DelAllByEmail(email string) error {
 	var (
-		condition = &VerificationCodeEntity{
+		condition = &Entity{
 			Type:   base.SendCodeTypeEmail,
 			Target: email,
 		}
@@ -146,7 +146,7 @@ func DelAllByEmail(email string) error {
 func DelAllByPhone(countryCode, phone string) error {
 
 	var (
-		condition = &VerificationCodeEntity{
+		condition = &Entity{
 			Type:        base.SendCodeTypePhone,
 			CountryCode: countryCode,
 			Target:      phone,
@@ -156,9 +156,9 @@ func DelAllByPhone(countryCode, phone string) error {
 	return condition.delAll()
 }
 
-func (e *VerificationCodeEntity) delAll() error {
+func (e *Entity) delAll() error {
 	var (
-		condition = &VerificationCodeEntity{
+		condition = &Entity{
 			Type:   e.Type,
 			Target: e.Target,
 		}
@@ -167,10 +167,10 @@ func (e *VerificationCodeEntity) delAll() error {
 		condition.CountryCode = e.CountryCode
 	}
 
-	if err := mysql.DB.Model(&VerificationCodeEntity{}).
+	if err := mysql.DB.Model(&Entity{}).
 		Where(condition).
 		Where("deleted_at = 0").
-		Updates(&VerificationCodeEntity{
+		Updates(&Entity{
 			BaseModelEntity: base.BaseModelEntity{
 				DeletedAt: time.Now().UnixMilli(),
 			},

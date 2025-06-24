@@ -11,7 +11,7 @@ const (
 	SceneResetPassword = "reset_password"
 )
 
-type VerificationCodeEntity struct {
+type Entity struct {
 	base.BaseModelEntity
 	Scene       string `gorm:"column:scene;type:varchar(100) not null;comment:场景: signin | reset_password"`
 	Type        string `gorm:"column:type;type:varchar(10) not null;comment:类型，email | phone"`
@@ -25,6 +25,6 @@ type VerificationCodeEntity struct {
 	Content     string `gorm:"column:content;type:text not null;comment:内容"`
 }
 
-func (VerificationCodeEntity) TableName() string {
+func (*Entity) TableName() string {
 	return cfg.ConfigEntity.TableName
 }

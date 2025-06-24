@@ -9,10 +9,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func (e *DeviceEntity) SaveInEntity() error {
-	var entity *DeviceEntity
+func (e *Entity) SaveInEntity() error {
+	var entity *Entity
 	if err := mysql.DB.Where(
-		&DeviceEntity{
+		&Entity{
 			AccountID:   e.AccountID,
 			DeviceID:    e.DeviceID,
 			DeviceType:  e.DeviceType,
@@ -41,12 +41,12 @@ func (e *DeviceEntity) SaveInEntity() error {
 }
 
 func DelAllByAccountID(accountID uint) error {
-	if err := mysql.DB.Model(&DeviceEntity{}).
-		Where(&DeviceEntity{
+	if err := mysql.DB.Model(&Entity{}).
+		Where(&Entity{
 			AccountID: accountID,
 		}).
 		Where("deleted_at = 0").
-		Updates(&DeviceEntity{
+		Updates(&Entity{
 			BaseModelEntity: base.BaseModelEntity{
 				DeletedAt: time.Now().UnixMilli(),
 			},

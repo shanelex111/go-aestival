@@ -8,7 +8,7 @@ const (
 	StatusEnable  = 1
 )
 
-type AccountEntity struct {
+type Entity struct {
 	base.BaseModelEntity
 	Email            string `gorm:"column:email;type:varchar(255) not null;comment:邮箱"`
 	PhoneCountryCode string `gorm:"column:phone_country_code;type:varchar(8) not null;comment:手机国家代码"`
@@ -17,6 +17,6 @@ type AccountEntity struct {
 	Status           int    `gorm:"column:status;type:tinyint not null;default:0;comment:状态：1：enable，0：disable，-1：deleted"`
 }
 
-func (AccountEntity) TableName() string {
+func (*Entity) TableName() string {
 	return cfg.ConfigEntity.TableName
 }
