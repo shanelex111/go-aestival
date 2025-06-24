@@ -2,10 +2,10 @@ package aestival_member
 
 import "go-auth/internal/base"
 
-type AestivalMemberEntity struct {
+type Entity struct {
 	base.BaseModelEntity
 }
 
-func (AestivalMemberEntity) TableName() string {
+func (*Entity) TableName() string {
 	return cfg.ConfigEntity.TableName
 }

@@ -2,10 +2,10 @@ package account_platform
 
 import "go-auth/internal/base"
 
-type AccountPlatformEntity struct {
+type Entity struct {
 	base.BaseModelEntity
 }
 
-func (AccountPlatformEntity) TableName() string {
+func (*Entity) TableName() string {
 	return cfg.ConfigEntity.TableName
 }
