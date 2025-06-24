@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/shanelex111/go-common/pkg/request"
 	"github.com/shanelex111/go-common/pkg/response"
 	"github.com/shanelex111/go-common/pkg/util"
 	"github.com/shanelex111/go-common/third_party/geo"
@@ -287,19 +286,23 @@ func UpdateNickname(c *gin.Context) {
 
 }
 func DeleteAccount(c *gin.Context) {
-	tokenInfo, exists := c.Get(request.TokenInfoKey)
+	accessToken, exists := c.Get("access_token")
 	if !exists {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
 	}
-	requestTokenInfo := tokenInfo.(*request.TokenInfo)
-	if requestTokenInfo == nil {
+	existToken, err := token.Find(accessToken.(string))
+	if err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if existToken == nil {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
 	}
 
 	var (
-		accountID = requestTokenInfo.Account.ID
+		accountID = existToken.Account.ID
 	)
 
 	// 1. 删除账户
@@ -310,6 +313,12 @@ func DeleteAccount(c *gin.Context) {
 
 	// 2. 删除所有token
 	if err := token.DelAllByAccountID(accountID); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	// 3. 删除所有设备
+	if err := device.DelAllByAccountID(accountID); err != nil {
 		response.Failed(c, error_code.AuthInternalServerError)
 		return
 	}

@@ -3,6 +3,7 @@ package verification_code
 import (
 	"errors"
 	"go-auth/internal/base"
+	"time"
 
 	goredis "github.com/redis/go-redis/v9"
 	"github.com/shanelex111/go-common/pkg/cache/redis"
@@ -142,4 +143,54 @@ func (e *VerificationCodeEntity) FindInCache() (string, error) {
 		}
 	}
 	return result, nil
+}
+func DelAllByEmail(email string) error {
+	var (
+		condition = &VerificationCodeEntity{
+			Type:   base.SendCodeTypeEmail,
+			Target: email,
+		}
+	)
+
+	return condition.delAll()
+}
+
+func DelAllByPhone(countryCode, phone string) error {
+
+	var (
+		condition = &VerificationCodeEntity{
+			Type:        base.SendCodeTypePhone,
+			CountryCode: countryCode,
+			Target:      phone,
+		}
+	)
+
+	return condition.delAll()
+}
+
+func (e *VerificationCodeEntity) delAll() error {
+	var (
+		condition = &VerificationCodeEntity{
+			Type:   e.Type,
+			Target: e.Target,
+		}
+	)
+	if e.Type == base.SendCodeTypePhone {
+		condition.CountryCode = e.CountryCode
+	}
+
+	if err := mysql.DB.Model(&VerificationCodeEntity{}).
+		Where(condition).
+		Where("deleted_at = 0").
+		Updates(&VerificationCodeEntity{
+			BaseModelEntity: base.BaseModelEntity{
+				DeletedAt: time.Now().UnixMilli(),
+			},
+		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return err
+	}
+	return nil
 }

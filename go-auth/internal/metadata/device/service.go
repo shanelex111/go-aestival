@@ -2,6 +2,8 @@ package device
 
 import (
 	"errors"
+	"go-auth/internal/base"
+	"time"
 
 	"github.com/shanelex111/go-common/pkg/db/mysql"
 	"gorm.io/gorm"
@@ -34,6 +36,25 @@ func (e *DeviceEntity) SaveInEntity() error {
 	entity.UpdatedIPCountryCode = e.UpdatedIPCountryCode
 	entity.UpdatedIPSubdivisionCode = e.UpdatedIPSubdivisionCode
 	entity.UpdatedIPCityName = e.UpdatedIPCityName
-	e = entity
+	*e = *entity
 	return mysql.DB.Save(entity).Error
+}
+
+func DelAllByAccountID(accountID uint) error {
+	if err := mysql.DB.Debug().Model(&DeviceEntity{}).
+		Where(&DeviceEntity{
+			AccountID: accountID,
+		}).
+		Where("deleted_at = 0").
+		Updates(&DeviceEntity{
+			BaseModelEntity: base.BaseModelEntity{
+				DeletedAt: time.Now().UnixMilli(),
+			},
+		}).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil
+		}
+		return err
+	}
+	return nil
 }

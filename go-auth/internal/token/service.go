@@ -206,7 +206,7 @@ func DelAllByAccountID(accountID uint) error {
 			pipe.Del(redis.Ctx, accessPrefix+token.Access.Token)
 			pipe.Del(redis.Ctx, refreshPrefix+token.Access.Refresh)
 		}
-		pipe.HDel(redis.Ctx, accountPrefixKey)
+		pipe.Del(redis.Ctx, accountPrefixKey)
 		if _, err := pipe.Exec(redis.Ctx); err != nil {
 			return err
 		}
