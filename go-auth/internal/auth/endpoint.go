@@ -412,7 +412,10 @@ func DeleteAccount(c *gin.Context) {
 	requestTokenInfo := tokenInfo.(*request.TokenInfo)
 
 	var (
-		accountID = requestTokenInfo.Account.ID
+		accountID        = requestTokenInfo.Account.ID
+		email            = requestTokenInfo.Account.Email
+		phoneCountryCode = requestTokenInfo.Account.PhoneCountryCode
+		phoneNumber      = requestTokenInfo.Account.PhoneNumber
 	)
 
 	// 1. 删除账户
@@ -434,14 +437,14 @@ func DeleteAccount(c *gin.Context) {
 	}
 
 	// 4. 删除所有verify codes
-	if requestTokenInfo.Account.Email != "" {
-		if err := verification_code.DelAllByEmail(requestTokenInfo.Account.Email); err != nil {
+	if email != "" {
+		if err := verification_code.DelAllByEmail(email); err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
 		}
 	}
-	if requestTokenInfo.Account.PhoneCountryCode != "" && requestTokenInfo.Account.PhoneNumber != "" {
-		if err := verification_code.DelAllByPhone(requestTokenInfo.Account.PhoneCountryCode, requestTokenInfo.Account.PhoneNumber); err != nil {
+	if phoneCountryCode != "" && phoneNumber != "" {
+		if err := verification_code.DelAllByPhone(phoneCountryCode, phoneNumber); err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
 		}
