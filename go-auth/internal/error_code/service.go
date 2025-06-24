@@ -53,6 +53,11 @@ var (
 		Code:    101408,
 		Message: "Verification Code Expired",
 	}
+	AuthSetTheSamePassword = &response.Error{
+		Status:  http.StatusUnauthorized,
+		Code:    101409,
+		Message: "Set the same password",
+	}
 
 	AuthInternalServerError = &response.Error{
 		Status:  http.StatusInternalServerError,

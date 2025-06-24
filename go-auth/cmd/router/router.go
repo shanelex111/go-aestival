@@ -22,7 +22,7 @@ func Run() {
 		authGroup.DELETE("/signout", request.AuthAccessToken(), auth.Signout)
 		authGroup.DELETE("/account", request.AuthAccessToken(), auth.DeleteAccount)
 
-		authGroup.PUT("/password", auth.ResetPassword)
+		authGroup.PUT("/password", request.AuthTokenInfo(), auth.ResetPassword)
 		authGroup.PUT("/avatar", auth.UpdateAvatar)
 		authGroup.PUT("/nickname", auth.UpdateNickname)
 

@@ -3,8 +3,8 @@ package auth
 import "go-auth/internal/token"
 
 type signinRequest struct {
-	SigninType string `json:"signin_type" binding:"required"`
-	CheckType  string `json:"check_type" binding:"required"`
+	SigninType string `json:"signin_type" binding:"required,oneof=email phone"`
+	CheckType  string `json:"check_type" binding:"required,oneof=verification_code password"`
 
 	Email string `json:"email"`
 
@@ -44,4 +44,18 @@ type sendCodeRequest struct {
 type verifyCodeRequest struct {
 	sendCodeRequest
 	Code string `json:"code" binding:"required"`
+}
+
+type resetPasswordRequest struct {
+	SigninType string `json:"signin_type" binding:"required,oneof=email phone"`
+	CheckType  string `json:"check_type" binding:"required,oneof=verification_code"`
+
+	Email string `json:"email"`
+
+	PhoneCountryCode string `json:"phone_country_code"`
+	PhoneNumber      string `json:"phone_number"`
+
+	VerificationCode string `json:"verification_code"`
+
+	NewPassword string `json:"new_password" binding:"required"`
 }

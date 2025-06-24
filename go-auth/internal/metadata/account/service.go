@@ -113,6 +113,25 @@ func FindByPhoneInEntity(phoneCountryCode, phoneNumber string) (*AccountEntity, 
 	return &entity, nil
 
 }
+func FindByAccountID(accountID uint) (*AccountEntity, error) {
+	var entity AccountEntity
+	if err := mysql.DB.
+		Where(&AccountEntity{
+			BaseModelEntity: base.BaseModelEntity{
+				ID: accountID,
+			},
+			Status: StatusEnable,
+		}).
+		Where("deleted_at = 0").
+		Last(&entity).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &entity, nil
+
+}
 
 func DelAllByAccountID(accountID uint) error {
 	if err := mysql.DB.Model(&AccountEntity{}).

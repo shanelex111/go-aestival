@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shanelex111/go-common/pkg/request"
 	"github.com/shanelex111/go-common/pkg/response"
 	"github.com/shanelex111/go-common/pkg/util"
 	"github.com/shanelex111/go-common/third_party/geo"
@@ -281,6 +282,94 @@ func RefreshToken(c *gin.Context) {
 	})
 }
 func ResetPassword(c *gin.Context) {
+	var req resetPasswordRequest
+	if err := c.ShouldBind(&req); err != nil {
+		response.Failed(c, error_code.AuthBadRequest)
+		return
+	}
+	tokenInfo, exists := c.Get(request.TokenInfoKey)
+	if !exists {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+
+	// 1. 手机号&验证码登录 | 邮箱&验证码登录
+	var (
+		foundEntity      *account.AccountEntity
+		requestTokenInfo = tokenInfo.(*request.TokenInfo)
+	)
+
+	// 1.1 手机号&验证码校验
+	if req.SigninType == base.SigninTypePhone && req.CheckType == base.CheckTypeVerificationCode {
+		if req.PhoneCountryCode == "" || req.PhoneNumber == "" || req.VerificationCode == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		valid, err := verifyPhoneCode(req.PhoneCountryCode, req.PhoneNumber, req.VerificationCode, verification_code.SceneResetPassword)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if !valid {
+			response.Failed(c, error_code.AuthVerificationCodeUnmatched)
+			return
+		}
+
+		foundEntity, err = account.FindByPhoneInEntity(req.PhoneCountryCode, req.PhoneNumber)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if foundEntity == nil {
+			response.Failed(c, error_code.AuthUnauthorized)
+			return
+		}
+		if foundEntity.ID != requestTokenInfo.Account.ID {
+			response.Failed(c, error_code.AuthUnauthorized)
+			return
+		}
+
+	}
+
+	// 1.2 邮箱&验证码校验
+	if req.SigninType == base.SigninTypeEmail && req.CheckType == base.CheckTypeVerificationCode {
+		if req.Email == "" || req.VerificationCode == "" {
+			response.Failed(c, error_code.AuthBadRequest)
+			return
+		}
+		valid, err := verifyEmailCode(req.Email, req.VerificationCode, verification_code.SceneResetPassword)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if !valid {
+			response.Failed(c, error_code.AuthVerificationCodeUnmatched)
+			return
+		}
+
+		foundEntity, err = account.FindByEmailInEntity(req.Email)
+		if err != nil {
+			response.Failed(c, error_code.AuthInternalServerError)
+			return
+		}
+		if foundEntity == nil {
+			response.Failed(c, error_code.AuthUnauthorized)
+			return
+		}
+		if foundEntity.ID != requestTokenInfo.Account.ID {
+			response.Failed(c, error_code.AuthUnauthorized)
+			return
+		}
+	}
+
+	if foundEntity == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+	if foundEntity.CheckPassword(req.NewPassword) {
+		response.Failed(c, error_code.AuthSetTheSamePassword)
+		return
+	}
 
 }
 func UpdateAvatar(c *gin.Context) {
