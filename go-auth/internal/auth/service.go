@@ -6,8 +6,9 @@ import (
 	"time"
 )
 
-func verifyEmailCode(email, code string) (bool, error) {
+func verifyEmailCode(email, code, scene string) (bool, error) {
 	queryEntity := &verification_code.VerificationCodeEntity{
+		Scene:  scene,
 		Type:   base.SendCodeTypeEmail,
 		Code:   code,
 		Target: email,
@@ -26,8 +27,9 @@ func verifyEmailCode(email, code string) (bool, error) {
 	return true, nil
 }
 
-func verifyPhoneCode(phoneCountryCode, phoneNumber, code string) (bool, error) {
+func verifyPhoneCode(phoneCountryCode, phoneNumber, code, scene string) (bool, error) {
 	queryEntity := &verification_code.VerificationCodeEntity{
+		Scene:       scene,
 		Type:        base.SendCodeTypeEmail,
 		Code:        code,
 		Target:      phoneNumber,

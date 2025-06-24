@@ -16,6 +16,7 @@ func (e *VerificationCodeEntity) FindInEntity() (*VerificationCodeEntity, error)
 	var (
 		entity    VerificationCodeEntity
 		condition = &VerificationCodeEntity{
+			Scene:  e.Scene,
 			Type:   e.Type,
 			Status: e.Status,
 			Target: e.Target,
@@ -39,6 +40,7 @@ func (e *VerificationCodeEntity) FindLastInEntity() (*VerificationCodeEntity, er
 	var (
 		entity    VerificationCodeEntity
 		condition = &VerificationCodeEntity{
+			Scene:  e.Scene,
 			Type:   e.Type,
 			Target: e.Target,
 			Status: e.Status,
@@ -84,6 +86,7 @@ func (e *VerificationCodeEntity) CountTodayInEntity() (int64, error) {
 func (e *VerificationCodeEntity) ExpiredAllInEntity() error {
 	var (
 		condition = &VerificationCodeEntity{
+			Scene:  e.Scene,
 			Type:   e.Type,
 			Target: e.Target,
 			Status: e.Status,
@@ -101,42 +104,14 @@ func (e *VerificationCodeEntity) SaveInEntity() error {
 }
 
 func (e *VerificationCodeEntity) SaveInCache() error {
-	var (
-		redisKey = cfg.Cache.Prefix + e.Type + ":"
-	)
-
-	if e.Type == base.SendCodeTypePhone {
-		redisKey += e.CountryCode + ":" + e.Target
-	} else {
-		redisKey += e.Target
-	}
-	return redis.RDB.Set(redis.Ctx, redisKey, e.Code, cfg.Period).Err()
+	return redis.RDB.Set(redis.Ctx, e.getRedisKey(), e.Code, cfg.Period).Err()
 }
 
 func (e *VerificationCodeEntity) DeleteInCache() error {
-	var (
-		redisKey = cfg.Cache.Prefix + e.Type + ":"
-	)
-
-	if e.Type == base.SendCodeTypePhone {
-		redisKey += e.CountryCode + ":" + e.Target
-	} else {
-		redisKey += e.Target
-	}
-	return redis.RDB.Del(redis.Ctx, redisKey).Err()
+	return redis.RDB.Del(redis.Ctx, e.getRedisKey()).Err()
 }
-
 func (e *VerificationCodeEntity) FindInCache() (string, error) {
-	var (
-		redisKey = cfg.Cache.Prefix + e.Type + ":"
-	)
-
-	if e.Type == base.SendCodeTypePhone {
-		redisKey += e.CountryCode + ":" + e.Target
-	} else {
-		redisKey += e.Target
-	}
-	result, err := redis.RDB.Get(redis.Ctx, redisKey).Result()
+	result, err := redis.RDB.Get(redis.Ctx, e.getRedisKey()).Result()
 	if err != nil {
 		if !errors.Is(err, goredis.Nil) {
 			return "", err
@@ -144,6 +119,19 @@ func (e *VerificationCodeEntity) FindInCache() (string, error) {
 	}
 	return result, nil
 }
+
+func (e *VerificationCodeEntity) getRedisKey() string {
+	var (
+		redisKey = cfg.Cache.Prefix + e.Scene + ":" + e.Type + ":"
+	)
+	if e.Type == base.SendCodeTypePhone {
+		redisKey += e.CountryCode + ":" + e.Target
+	} else {
+		redisKey += e.Target
+	}
+	return redisKey
+}
+
 func DelAllByEmail(email string) error {
 	var (
 		condition = &VerificationCodeEntity{

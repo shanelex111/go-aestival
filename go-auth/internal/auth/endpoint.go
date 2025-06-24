@@ -34,7 +34,7 @@ func Signin(c *gin.Context) {
 			response.Failed(c, error_code.AuthBadRequest)
 			return
 		}
-		valid, err := verifyPhoneCode(req.PhoneCountryCode, req.PhoneNumber, req.VerificationCode)
+		valid, err := verifyPhoneCode(req.PhoneCountryCode, req.PhoneNumber, req.VerificationCode, verification_code.SceneSignin)
 		if err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
@@ -56,7 +56,7 @@ func Signin(c *gin.Context) {
 			response.Failed(c, error_code.AuthBadRequest)
 			return
 		}
-		valid, err := verifyEmailCode(req.Email, req.VerificationCode)
+		valid, err := verifyEmailCode(req.Email, req.VerificationCode, verification_code.SceneSignin)
 		if err != nil {
 			response.Failed(c, error_code.AuthInternalServerError)
 			return
@@ -334,6 +334,7 @@ func SendCode(c *gin.Context) {
 	}
 
 	queryEntity := &verification_code.VerificationCodeEntity{
+		Scene:  req.Scene,
 		Type:   req.Type,
 		Status: verification_code.StatusPending,
 	}
@@ -430,6 +431,7 @@ func VerifyCode(c *gin.Context) {
 	}
 
 	queryEntity := &verification_code.VerificationCodeEntity{
+		Scene:  req.Scene,
 		Type:   req.Type,
 		Status: verification_code.StatusPending,
 		Code:   req.Code,

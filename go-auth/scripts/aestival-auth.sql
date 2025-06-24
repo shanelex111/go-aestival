@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS verification_code;
 
 CREATE TABLE `verification_code` (
     `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `scene` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '场景: signin | reset_password',
     `type` varchar(10) NOT NULL COMMENT '类型，email | phone',
     `target` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '邮箱/手机号',
     `country_code` varchar(8) NOT NULL COMMENT '国家码',
@@ -65,7 +66,7 @@ CREATE TABLE `verification_code` (
     PRIMARY KEY (`id`),
     KEY `idx_target_type` (`type`, `target`) USING BTREE,
     KEY `idx_target_country` (`target`, `country_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '验证码表';
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '验证码表';
 
 DROP TABLE IF EXISTS `account_platform`;
 
