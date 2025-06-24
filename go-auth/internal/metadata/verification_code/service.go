@@ -27,7 +27,7 @@ func (e *VerificationCodeEntity) FindInEntity() (*VerificationCodeEntity, error)
 		condition.CountryCode = e.CountryCode
 	}
 
-	if err := mysql.DB.Debug().Where(condition).Where("deleted_at = 0").Last(&entity).Error; err != nil {
+	if err := mysql.DB.Where(condition).Where("deleted_at = 0").Last(&entity).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}

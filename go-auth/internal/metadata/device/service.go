@@ -41,7 +41,7 @@ func (e *DeviceEntity) SaveInEntity() error {
 }
 
 func DelAllByAccountID(accountID uint) error {
-	if err := mysql.DB.Debug().Model(&DeviceEntity{}).
+	if err := mysql.DB.Model(&DeviceEntity{}).
 		Where(&DeviceEntity{
 			AccountID: accountID,
 		}).
