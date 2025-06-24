@@ -371,6 +371,21 @@ func ResetPassword(c *gin.Context) {
 		return
 	}
 
+	// 2. 修改密码
+	if err := foundEntity.SetPassword(req.NewPassword); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+	if err := foundEntity.Update(); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
+
+	// 3. 删除所有token
+	if err := token.DelAllByAccountID(foundEntity.ID); err != nil {
+		response.Failed(c, error_code.AuthInternalServerError)
+		return
+	}
 }
 func UpdateAvatar(c *gin.Context) {
 

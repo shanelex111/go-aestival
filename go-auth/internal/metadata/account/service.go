@@ -65,6 +65,9 @@ func (e *AccountEntity) SaveInEntity(signinType, checkType string) error {
 	return mysql.DB.Save(entity).Error
 }
 
+func (e *AccountEntity) Update() error {
+	return mysql.DB.Save(e).Error
+}
 func (e *AccountEntity) SetPassword(pw string) error {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
 	if err != nil {
