@@ -44,13 +44,3 @@ token:
     access_valid: "30m"
     refresh_valid: "168h"
     limit: 5
-
-nacos:
-  server_configs:
-    - ip_addr: 211.100.75.234
-      port: 8848
-
-  client_config:
-    namespace_id: "80ac9031-5fb6-4ed5-b172-a088d7369a8f"
-    data_id: "go-auth.yaml"
-    group: "DEFAULT_GROUP"
