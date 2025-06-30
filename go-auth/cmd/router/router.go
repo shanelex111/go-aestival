@@ -1,6 +1,7 @@
 package router
 
 import (
+	"go-auth/internal/account"
 	"go-auth/internal/auth"
 
 	"github.com/gin-gonic/gin"
@@ -15,23 +16,37 @@ func Run() {
 	r.Use(request.SetUUID())
 	r.Use(request.SetLogger())
 
-	authNoTokenGroup := r.Group("/auth/v1")
+	// auth
 	{
-		authNoTokenGroup.POST("/signin", auth.Signin)
-		authNoTokenGroup.POST("/refresh-token", auth.RefreshToken)
-		authNoTokenGroup.POST("/send-code", auth.SendCode)
-		authNoTokenGroup.POST("/verify-code", auth.VerifyCode)
 
+		authNoTokenGroup := r.Group("/auth/v1")
+		{
+			authNoTokenGroup.POST("/signin", auth.Signin)
+			authNoTokenGroup.POST("/refresh-token", auth.RefreshToken)
+			authNoTokenGroup.POST("/send-code", auth.SendCode)
+			authNoTokenGroup.POST("/verify-code", auth.VerifyCode)
+			authNoTokenGroup.PUT("/password", auth.ResetPassword)
+
+		}
+
+		authTokenGroup := r.Group("/auth/v1")
+		authTokenGroup.Use(request.AuthTokenInfo())
+		{
+			authTokenGroup.DELETE("/signout", auth.Signout)
+		}
 	}
 
-	authTokenGroup := r.Group("/auth/v1")
-	authTokenGroup.Use(request.AuthTokenInfo())
+	// account
 	{
-		authTokenGroup.DELETE("/signout", auth.Signout)
-		authTokenGroup.DELETE("/account", auth.DeleteAccount)
-		authTokenGroup.PUT("/password", auth.ResetPassword)
-		authTokenGroup.PUT("/avatar", auth.UpdateAvatar)
-		authTokenGroup.PUT("/nickname", auth.UpdateNickname)
+
+		accountGroup := r.Group("/account/v1")
+		accountGroup.Use(request.AuthTokenInfo())
+		{
+			accountGroup.GET("/info", account.GetInfo)
+			accountGroup.PUT("/avatar", account.UpdateAvatar)
+			accountGroup.PUT("/nickname", account.UpdateNickname)
+			accountGroup.DELETE("/account", account.DeleteAccount)
+		}
 	}
 
 	if err := r.Run(":" + engine.GetPort()); err != nil {

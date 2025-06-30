@@ -4,7 +4,6 @@ import (
 	"go-auth/cmd/router"
 	"go-auth/internal/metadata/account"
 	"go-auth/internal/metadata/account_platform"
-	"go-auth/internal/metadata/aestival_member"
 	"go-auth/internal/metadata/device"
 	"go-auth/internal/metadata/verification_code"
 	"go-auth/internal/token"
@@ -40,7 +39,6 @@ func main() {
 	server.Load(v,
 		account.Load,
 		account_platform.Load,
-		aestival_member.Load,
 		device.Load,
 		verification_code.Load,
 
