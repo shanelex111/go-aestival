@@ -14,6 +14,16 @@ import (
 )
 
 func GetInfo(c *gin.Context) {
+	tokenInfo, exists := c.Get(request.TokenInfoKey)
+	if !exists {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+	if requestTokenInfo == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
 
 }
 func UpdateAvatar(c *gin.Context) {
@@ -29,6 +39,10 @@ func DeleteAccount(c *gin.Context) {
 		return
 	}
 	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+	if requestTokenInfo == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
 
 	var (
 		accountID        = requestTokenInfo.Account.ID

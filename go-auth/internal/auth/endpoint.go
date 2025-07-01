@@ -199,6 +199,10 @@ func Signout(c *gin.Context) {
 	}
 
 	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+	if requestTokenInfo == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
 
 	cacheToken := &token.CacheToken{
 		Account: &token.CacheTokenAccount{

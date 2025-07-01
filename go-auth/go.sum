@@ -395,6 +395,8 @@ github.com/shanelex111/go-common v0.0.0-20250625045613-13746328e194 h1:lPWDWfh5K
 github.com/shanelex111/go-common v0.0.0-20250625045613-13746328e194/go.mod h1:0LQDUVJ1iWOfGVPcvWCm8wFa5bzqo8t8SQK7ygvzfUk=
 github.com/shanelex111/go-common v0.0.0-20250625050533-d5401a068f5f h1:/o1FZNTZ9LFsKE3yNvq5WjOQ5OzvCU2g6qMTbe3CcGk=
 github.com/shanelex111/go-common v0.0.0-20250625050533-d5401a068f5f/go.mod h1:0LQDUVJ1iWOfGVPcvWCm8wFa5bzqo8t8SQK7ygvzfUk=
+github.com/shanelex111/go-common v0.0.0-20250701020907-de9b194fc2d3 h1:mf6tsIqluWW2o3XTFip1s3RxQRy53BH+SdznQfMBL5w=
+github.com/shanelex111/go-common v0.0.0-20250701020907-de9b194fc2d3/go.mod h1:0LQDUVJ1iWOfGVPcvWCm8wFa5bzqo8t8SQK7ygvzfUk=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
 github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrfsX/uA88=
