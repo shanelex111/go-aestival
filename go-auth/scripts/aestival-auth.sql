@@ -87,15 +87,3 @@ CREATE TABLE `account_platform` (
     PRIMARY KEY (`id`),
     KEY `idx_account_id` (`account_id`) USING BTREE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '第三方账户表';
-
-DROP TABLE IF EXISTS `aestival_member`;
-
-CREATE TABLE `aestival_member` (
-    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `account_id` int unsigned NOT NULL COMMENT '账户ID',
-    `created_at` bigint NOT NULL COMMENT '创建时间，毫秒时间戳',
-    `updated_at` bigint NOT NULL COMMENT '更新时间，毫秒时间戳',
-    `deleted_at` bigint NOT NULL COMMENT '注销时间，毫秒时间戳',
-    PRIMARY KEY (`id`),
-    KEY `idx_account_id` (`account_id`) USING BTREE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户表';
