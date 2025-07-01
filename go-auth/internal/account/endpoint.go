@@ -14,12 +14,7 @@ import (
 )
 
 func GetInfo(c *gin.Context) {
-	tokenInfo, exists := c.Get(request.TokenInfoKey)
-	if !exists {
-		response.Failed(c, error_code.AuthUnauthorized)
-		return
-	}
-	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+	requestTokenInfo := request.GetTokenInfo(c)
 	if requestTokenInfo == nil {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
@@ -27,18 +22,21 @@ func GetInfo(c *gin.Context) {
 
 }
 func UpdateAvatar(c *gin.Context) {
-
-}
-func UpdateNickname(c *gin.Context) {
-
-}
-func DeleteAccount(c *gin.Context) {
-	tokenInfo, exists := c.Get(request.TokenInfoKey)
-	if !exists {
+	requestTokenInfo := request.GetTokenInfo(c)
+	if requestTokenInfo == nil {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
 	}
-	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+}
+func UpdateNickname(c *gin.Context) {
+	requestTokenInfo := request.GetTokenInfo(c)
+	if requestTokenInfo == nil {
+		response.Failed(c, error_code.AuthUnauthorized)
+		return
+	}
+}
+func DeleteAccount(c *gin.Context) {
+	requestTokenInfo := request.GetTokenInfo(c)
 	if requestTokenInfo == nil {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return

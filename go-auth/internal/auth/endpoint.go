@@ -192,13 +192,7 @@ func Signin(c *gin.Context) {
 }
 
 func Signout(c *gin.Context) {
-	tokenInfo, exists := c.Get(request.TokenInfoKey)
-	if !exists {
-		response.Failed(c, error_code.AuthUnauthorized)
-		return
-	}
-
-	requestTokenInfo := tokenInfo.(*request.TokenInfo)
+	requestTokenInfo := request.GetTokenInfo(c)
 	if requestTokenInfo == nil {
 		response.Failed(c, error_code.AuthUnauthorized)
 		return
